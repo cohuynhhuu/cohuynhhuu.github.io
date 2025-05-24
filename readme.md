@@ -1,57 +1,95 @@
 # Photo Shoot Effect Website
 
-A modern, responsive website featuring a photo shoot effect with elegant CSS animations and 3D transformations.
+A modern, responsive website showcasing interactive photo effects with advanced CSS animations and 3D transformations.
 
 ## Author
-Co Huynh Huu
+Co Huynh Huu  
+Last Updated: May 2025
 
 ## Project Structure
 
 ```
 ├── index.html              # Main HTML file
-├── photo-shoot-effect.css  # CSS styles and animations
-└── images/
-    └── photo.jpg          # Image used in the article
+├── styles/
+│   └── photo-shoot-effect.css  # CSS styles and animations
+├── assets/
+│   └── images/            # Image assets
+│       └── photo.jpg      # Main photo
+└── README.md              # Project documentation
 ```
 
 ## Technologies Used
 
-- **HTML5** - Semantic markup structure
-- **CSS3** - Modern styling features including:
+- **HTML5**
+  - Semantic markup
+  - Modern structural elements
+  - Accessibility features
+- **CSS3**
   - Custom Properties (CSS Variables)
-  - Flexbox for navigation
-  - 3D Transforms and Perspective
-  - CSS Gradients
-  - Backdrop Filter effects
-  - Google Fonts (Poppins)
-  - Media Queries for responsiveness
+  - Flexbox & Grid layouts
+  - 3D Transforms
+  - CSS Animations
+  - Gradient effects
+  - Backdrop filters
+  - Google Fonts integration
+  - Responsive design
 
-## Features
+## Key Features
 
-- 3D transformation effects on hover
-- Glass-morphism design elements
-- Responsive layout that adapts to mobile devices
-- Gradient text effects
-- Custom navigation with hover animations
-- Article cards with depth effect
-- Modern typography using Google Fonts
-- Smooth transitions and animations
+- ✨ Interactive 3D photo transformations
+- 🎨 Modern glass-morphism UI elements
+- 📱 Fully responsive design
+- 🎯 Performance optimized
+- 🎭 Dynamic hover animations
+- 🔤 Custom typography
+- 🌈 Gradient effects
+- ⚡ Zero dependencies
 
 ## Browser Support
 
-The website uses modern CSS features and is optimized for latest versions of:
-- Chrome
-- Firefox
+Optimized for modern browsers (2025+):
+- Google Chrome
+- Mozilla Firefox
+- Microsoft Edge
 - Safari
-- Edge
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/photo-shoot-effect.git
+```
+
+2. Navigate to project directory:
+```bash
+cd photo-shoot-effect
+```
+
+3. Open in browser:
+- Double-click `index.html` or
+- Use Live Server in VS Code
 
 ## Development
 
-To run this project locally:
-1. Clone the repository
-2. Open `index.html` in a web browser
-3. No build process required - it's pure HTML and CSS
+No build process required - pure HTML and CSS implementation.
+
+### Prerequisites
+- Any modern web browser
+- Basic text editor (VS Code recommended)
+
+### Making Changes
+1. Edit HTML in `index.html`
+2. Modify styles in `styles/photo-shoot-effect.css`
+3. Refresh browser to see changes
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
 ## License
 
-Copyright © 2017 - YourSite.com
+Copyright © 2025 - All rights reserved
