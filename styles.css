@@ -1,0 +1,167 @@
+/* =============================================
+   🔹 RESET DEFAULT STYLES
+   This ensures a consistent layout by resetting margins, padding, and box-sizing across all elements.
+============================================= */
+* {
+  margin: 0;               /* Removes the default margin for all elements */
+  padding: 0;              /* Removes the default padding for all elements */
+  box-sizing: border-box;  /* Includes padding and border in the element's total width and height */
+}
+
+/* =============================================
+   🔹 BODY STYLES
+   Setting up default background, font, text color, and line spacing.
+============================================= */
+body {
+  font-family: Arial, sans-serif; /* Default font for the body of the page */
+  background: #ffffff;           /* White background for the page */
+  color: #e65100;                /* Orange color for the text */
+  width: 90%;                     /* Content width is 90% of the page */
+  margin: auto;                   /* Centers the page content horizontally */
+  line-height: 1.6;               /* Line height for improved readability */
+}
+
+/* =============================================
+🔹 ELEMENT STYLES (h1, h2, p)
+   These styles apply to the heading and paragraph elements for consistent typography.
+============================================= */
+h1, h2, p {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font-family for headings and paragraphs */
+  color: #e65100;               /* Orange color for headings and paragraphs */
+}
+
+/* =============================================
+   🔹 CONTAINER STYLES
+   Defines a central container with max width and padding.
+============================================= */
+.container {
+  max-width: 1000px; /* Sets a maximum width for the container */
+  margin: auto;      /* Centers the container horizontally */
+  padding: 20px;     /* Adds padding inside the container */
+}
+
+/* =============================================
+   🔹 HEADER STYLES
+   Specific styles for the header section with background color and text formatting.
+============================================= */
+header {
+  background-color: #ff9800; /* Bright orange background for the header */
+  color: #ffffff;            /* White text color */
+  text-align: center;        /* Centers the text inside the header */
+  padding: 40px 0;           /* Adds padding to the top and bottom of the header */
+  text-transform: uppercase; /* Makes the header text uppercase */
+}
+
+/* =============================================
+   🔹 SECTION STYLES
+   Sections with white background, left border, and rounded corners.
+============================================= */
+section {
+  background: #ffffff;         /* White background for each section */
+  margin: 20px 0;               /* Adds space between sections */
+  padding: 20px;                /* Padding inside sections */
+  border-left: 5px solid #ff9800; /* Orange left border to highlight sections */
+  border-radius: 8px;           /* Rounded corners for sections */
+}
+
+/* =============================================
+🔹 SECTION HEADER STYLES
+   Specific styles for headings within each section.
+============================================= */
+section h2 {
+  color: #e65100;    /* Orange color for the section header */
+  font-size: 28px;    /* Font size for the section header */
+  margin-bottom: 15px; /* Adds space below the section header */
+}
+
+/* =============================================
+   🔹 BEFORE PSEUDO-ELEMENTS FOR SECTION HEADINGS
+   Adds a star symbol before the section heading to make it visually distinct.
+============================================= */
+section h2::before {
+  content: "★ ";         /* Adds a star symbol before the section heading */
+  color: #fb8c00;        /* Orange color for the star */
+}
+
+/* =============================================
+   🔹 PROJECTS LIST STYLES
+   Specific styles for list items inside the projects section.
+============================================= */
+.projects ul li {
+  list-style: square inside; /* Adds a square list style inside the list items */
+  margin-bottom: 8px;         /* Adds space between list items */
+  font-weight: bold;          /* Makes the text bold in list items */
+}
+
+/* =============================================
+   🔹 ALTERNATING LIST ITEM COLORS
+   Applies alternating colors to the odd and even list items.
+============================================= */
+.projects ul li:nth-child(odd) {
+  color: #e65100; /* Dark orange for odd items */
+}
+.projects ul li:nth-child(even) {
+  color: #ffb74d; /* Light orange for even items */
+}
+
+/* =============================================
+   🔹 FIRST LETTER AND FIRST LINE STYLES IN ABOUT SECTION
+   Enhances the first letter and the first line of paragraphs in the about section.
+============================================= */
+.about p::first-letter {
+  font-size: 24px;       /* Increases the font size of the first letter */
+  font-weight: bold;     /* Makes the first letter bold */
+color: #f57c00;        /* Applies a brighter orange color to the first letter */
+}
+
+.about p::first-line {
+  color: #ff9800;        /* Applies a strong orange color to the first line */
+}
+
+/* =============================================
+   🔹 HOVER EFFECT FOR LINKS
+   Changes the color and adds an underline effect when a link is hovered.
+============================================= */
+a:hover {
+  color: #ff5722;         /* Changes the link color to a stronger orange when hovered */
+  text-decoration: underline; /* Underlines the link when hovered */
+}
+
+/* =============================================
+   🔹 ICON STYLE IN CONTACT SECTION
+   Applies a specific color to phone icons in the contact section.
+============================================= */
+.contact p i[class*="phone"] {
+  color: #1976d2; /* Blue color for phone icons to make them stand out */
+}
+
+/* =============================================
+   🔹 FOOTER STYLES
+   Defines the styling for the page footer with a background color and centered text.
+============================================= */
+footer {
+  background-color: #e65100; /* Dark orange background for the footer */
+  color: #ffffff;            /* White text in the footer */
+  text-align: center;        /* Centers the footer content */
+  padding: 20px;             /* Adds padding inside the footer */
+  margin-top: 30px;          /* Adds space above the footer */
+}
+
+/* =============================================
+   🔹 FOOTER FIRST PARAGRAPH STYLES
+   Specifically styles the first paragraph inside the footer.
+============================================= */
+footer p:first-of-type {
+  font-weight: bold;         /* Makes the first paragraph text bold */
+  font-size: 18px;           /* Sets a larger font size for the first paragraph */
+  color: #fff3e0;            /* Light cream color for emphasis */
+}
+
+/* =============================================
+   🔹 CONTACT CONTAINER BORDER STYLES
+   Adds a top border with a light blue color to the contact container.
+============================================= */
+.contact.container {
+  border-top: 3px solid #90caf9; /* Light blue border at the top of the contact section */
+}
+
