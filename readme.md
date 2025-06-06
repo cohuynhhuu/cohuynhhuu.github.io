@@ -9,13 +9,18 @@ Last Updated: May 2025
 ## Project Structure
 
 ```
-├── index.html              # Main HTML file
+├── index.html                   # Main HTML file
 ├── styles/
-│   └── photo-shoot-effect.css  # CSS styles and animations
+│   ├── photo-shoot-effect.css   # CSS styles and animations
+│   └── reset.css                # CSS reset (if present)
+├── scripts/
+│   └── main.js                  # JavaScript for interactivity (if present)
 ├── assets/
-│   └── images/            # Image assets
-│       └── photo.jpg      # Main photo
-└── README.md              # Project documentation
+│   ├── images/                  # Image assets
+│   │   └── photo.jpg            # Main photo
+│   └── fonts/                   # Custom fonts (if used)
+├── .gitignore                   # Git ignore file
+└── README.md                    # Project documentation
 ```
 
 ## Technologies Used
@@ -33,6 +38,9 @@ Last Updated: May 2025
   - Backdrop filters
   - Google Fonts integration
   - Responsive design
+- **JavaScript** (if scripts/main.js is present)
+  - Interactive effects
+  - DOM manipulation
 
 ## Key Features
 
@@ -71,7 +79,7 @@ cd photo-shoot-effect
 
 ## Development
 
-No build process required - pure HTML and CSS implementation.
+No build process required - pure HTML, CSS, and optional JavaScript implementation.
 
 ### Prerequisites
 - Any modern web browser
@@ -80,7 +88,8 @@ No build process required - pure HTML and CSS implementation.
 ### Making Changes
 1. Edit HTML in `index.html`
 2. Modify styles in `styles/photo-shoot-effect.css`
-3. Refresh browser to see changes
+3. Edit scripts in `scripts/main.js` (if present)
+4. Refresh browser to see changes
 
 ## Contributing
 
