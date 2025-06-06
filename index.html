@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <title>The Brown Bear</title>
+    <meta charset="UTF-8">
+    <title>cohuynhhuu.github.io</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Repository homepage for cohuynhhuu.github.io">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-    <h1>The Brown Bear</h1>
-
-    <p>The brown bear (Ursus arctos) is native to parts of northern Eurasia
-        and North America. Its conservation status is currently "Least
-        Concern." There are many subspecies within the brown bear species,
-        including the Atlas bear and the Himalayan brown bear.</p>
-
-
-    <p><a href="https://en.wikipedia.org/wiki/Brown_bear">Learn more</a></p>
-
-    <p>Here are some bear species:</p>
-    <ul>
-        <li>Arctos</li>
-        <li>Collarus</li>
-        <li>Horribilis</li>
-        <li>Nelsoni (extinct)</li>
-    </ul>
-
-    <p>The following countries have the largest populations of brown bears:</p>
-    <ol>
-        <li>Russia</li>
-        <li>United States</li>
-        <li>Canada</li>
-    </ol>
-
-
-    <img src="/fruits/images/bear.jpg" alt="Brown Bear" width="400" />
-
+    <header>
+        <h1>cohuynhhuu.github.io</h1>
+        <p>Welcome to the repository homepage!</p>
+    </header>
+    <section class="repo-info">
+        <h2>Repository Information</h2>
+        <ul>
+            <li><strong>Repository Name:</strong> cohuynhhuu.github.io</li>
+            <li><strong>Owner:</strong> cohuynhhuu</li>
+            <li><strong>Type:</strong> GitHub Pages (Personal Website)</li>
+            <li><strong>Repository URL:</strong> <a href="https://github.com/cohuynhhuu/cohuynhhuu.github.io" target="_blank">https://github.com/cohuynhhuu/cohuynhhuu.github.io</a></li>
+            <li><strong>Live Site:</strong> <a href="https://cohuynhhuu.github.io/" target="_blank">https://cohuynhhuu.github.io/</a></li>
+        </ul>
+        <p>
+            This repository hosts the personal website for <strong>cohuynhhuu</strong>.<br>
+            You can find source code, updates, and more information on the GitHub repository.
+        </p>
+    </section>
+    <div class="bubbles"></div>
+    <script>
+        // Bubble animation
+        const bubbles = document.querySelector('.bubbles');
+        for (let i = 0; i < 30; i++) {
+            const bubble = document.createElement('span');
+            bubble.className = 'bubble';
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.animationDuration = (4 + Math.random() * 6) + 's';
+            bubble.style.opacity = 0.2 + Math.random() * 0.5;
+            bubble.style.width = bubble.style.height = (10 + Math.random() * 30) + 'px';
+            bubbles.appendChild(bubble);
+        }
+    </script>
 </body>
-
 </html>
