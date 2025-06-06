@@ -58,8 +58,8 @@ h1 {
   grid-row: 1;
   justify-self: end;
   animation:
-    moveHorizontal 8.5s 0.5s 1,
-    shrinkHorizontal 2s 9s ease-in 1;
+    moveHorizontal 8.5s 0.5s infinite,
+    shrinkHorizontal 2s 9s ease-in infinite;
   animation-fill-mode: forwards;
 }
 
@@ -68,8 +68,8 @@ h1 {
   grid-row: 1;
   justify-self: end;
   animation:
-    shrinkHorizontal 2s 11s 1;
-  animation-fill-mode: forwards;
+    shrinkHorizontal 2s 5s infinite;
+  animation-fill-mode: none;
 }
 
 .gallery img:nth-child(3) {
@@ -89,9 +89,9 @@ h1 {
   justify-self: center;
   align-self: start;
   animation:
-    growHorizontal 2.25s 11s 1,
-    moveHorizontal 4s 14s 1,
-    shrinkVertical 2s 18s 1;
+    growHorizontal 2.25s 11s infinite,
+    moveHorizontal 4s 14s infinite,
+    shrinkVertical 2s 18s infinite;
   animation-fill-mode: forwards;
 }
 
