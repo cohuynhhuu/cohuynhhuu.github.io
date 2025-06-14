@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Flexbox Dễ Hiểu</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: row;
+            /* Xếp ngang */
+            justify-content: space-around;
+            /* Các box cách đều nhau */
+            align-items: center;
+            /* Căn giữa theo chiều dọc */
+            height: 200px;
+            background-color: #f0f0f0;
+            border: 2px dashed #aaa;
+        }
+
+        .item {
+            width: 180px;
+            height: 180px;
+            background-color: #4caf50;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Demo Flexbox</h2>
+    <div class="container">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+    </div>
+
+</body>
+
+</html>

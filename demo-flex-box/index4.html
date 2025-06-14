@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flex Grow Demo</title>
+  <style>
+    .flex-grow-container {
+      display: flex;
+    }
+    .item {
+      background-color: #4caf50;
+      color: white;
+      padding: 20px;
+      margin: 5px;
+      text-align: center;
+    }
+    .item:first-child {
+      flex: 1; /* Chiếm 1 phần */
+    }
+    .item:last-child {
+      flex: 3; /* Chiếm 2 phần */
+    }
+  </style>
+</head>
+<body>
+<h1>Chia tỷ lệ co giãn	flex-grow hoặc flex</p>
+<div class="flex-grow-container">
+  <div class="item">1 phần</div>
+  <div class="item">3 phần</div>
+</div>
+
+</body>
+</html>
