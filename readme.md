@@ -23,6 +23,12 @@ Last Updated: June 2025
 │   ├── index4.html            # Flex grow
 │   ├── index5.html            # Card gallery
 │   └── index6.html            # Swiper.js integration
+├── layout-website/            # Complete Website Layout Demo
+│   ├── index.html            # Main layout page
+│   ├── styles.css            # Layout styles
+│   └── assets/               # Website assets
+│       ├── images/           # Image assets
+│       └── js/               # JavaScript files
 ├── image-gallery-animated/     # Animated gallery
 │   ├── index.html             # Gallery markup
 │   └── style.css              # Animation styles
@@ -97,7 +103,14 @@ Last Updated: June 2025
    - Responsive designs
    - Card layouts
 
-3. **Interactive Components**
+3. **Complete Website Layouts**
+   - Modern responsive layout
+   - Navigation components
+   - Hero sections
+   - Content organization
+   - Footer designs
+
+4. **Interactive Components**
    - Login forms
    - Image galleries
    - Social media links
