@@ -45,6 +45,7 @@ header {
     justify-content: center;
     gap: 30px;
     position: relative;
+    flex-direction: row;
 }
 
 .navmenu ul li {
