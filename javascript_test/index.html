@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<!-- <head>
+    <meta charset="utf-8">
+    <title>The Calculate MPG Application</title>
+    <script>
+        alert("The Calculate MPG application");
+        var miles = prompt("Enter miles driven");
+        miles = parseFloat(miles);
+        var gallons = prompt("Enter gallons of gas used");
+        gallons = parseFloat(gallons);
+        var mpg = miles/gallons;
+        mpg = parseInt(mpg);
+        alert("Miles per gallon = " + mpg);
+    </script>
+</head> -->
+
+<head>
+    <title>Calculate Miles Per Gallon</title>
+    <script>
+        var again = "y";
+        do {
+            var miles = prompt("Enter miles driven");
+            miles = parseFloat(miles);
+            var gallons = prompt("Enter gallons of gas used");
+            gallons = parseFloat(gallons);
+
+            if (!isNaN(miles) && miles > 0 && !isNaN(gallons) && gallons > 0) {
+                var mpg = miles / gallons;
+                mpg = parseInt(mpg);
+                alert("Miles per gallon = " + mpg);
+            } else {
+                alert("One or both entries are invalid");
+            }
+            again = prompt("Repeat entries?", "y");
+        } while (again == "y");
+    </script>
+</head>
+
+<body>
+    <section>
+        <h1>This page is displayed after the JavaScript is executed</h1>
+    </section>
+</body>
+</html>

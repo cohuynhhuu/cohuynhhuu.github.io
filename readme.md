@@ -46,9 +46,28 @@ Last Updated: June 2025
 ├── social-media/             # Social media components
 │   ├── index.html           # Social links demo
 │   └── styles.css           # Social icons styles
+├── task-manager/             # Modern Task Manager App
+│   ├── index.html           # Task manager UI
+│   ├── task_list.css        # Task manager styles
+│   ├── task_list.js         # Main logic
+│   ├── library_storage.js   # Storage utilities
+│   └── library_tasklist.js  # Task list utilities
 └── wiki-page/               # Wiki page demo
     └── index.html           # Wiki markup
 ```
+
+## Demo Pages
+
+- [Bootstrap Demos](demo-bootstrap/index.html)
+- [Flexbox Demos](demo-flex-box/index.html)
+- [Layout Website Demo](layout-website/index.html)
+- [Animated Gallery](image-gallery-animated/index.html)
+- [Login Form](login-form/index.html)
+- [Photo Shoot Effect](photo-shoot-effect/photo-shoot-effect.html)
+- [Portfolio Demo](portfolio-lab/index.html)
+- [Social Media Links](social-media/index.html)
+- [Task Manager (New Feature!)](task-manager/index.html)
+- [Wiki Page Demo](wiki-page/index.html)
 
 ## Technologies Used
 
@@ -85,44 +104,7 @@ Last Updated: June 2025
 - 🔐 Form validation
 - 🌙 Dark mode support
 - 📸 Image galleries
-- 🔄 Carousel sliders
-- 🎯 Performance optimized
-
-## Demo Categories
-
-1. **Bootstrap Examples**
-   - Basic components
-   - Form validation
-   - Grid system
-   - Navigation
-   - Modals
-
-2. **Flexbox Layouts**
-   - Basic concepts
-   - Centering techniques
-   - Responsive designs
-   - Card layouts
-
-3. **Complete Website Layouts**
-   - Modern responsive layout
-   - Navigation components
-   - Hero sections
-   - Content organization
-   - Footer designs
-
-4. **Interactive Components**
-   - Login forms
-   - Image galleries
-   - Social media links
-   - Portfolio layouts
-
-## Browser Support
-
-Optimized for modern browsers (2025+):
-- Google Chrome
-- Mozilla Firefox
-- Microsoft Edge
-- Safari
+- 📝 Modern Task Manager (add, delete, clear, keyboard shortcuts)
 
 ## Getting Started
 
@@ -131,36 +113,7 @@ Optimized for modern browsers (2025+):
 git clone https://github.com/cohuynhhuu/cohuynhhuu.github.io.git
 ```
 
-2. Navigate to project directory:
-```bash
-cd cohuynhhuu.github.io
-```
-
-3. Open any demo:
-- Use Live Server in VS Code, or
-- Open HTML files directly in browser
-
-## Development
-
-Each demo is self-contained and requires no build process.
-
-### Prerequisites
-- Modern web browser
-- Text editor (VS Code recommended)
-- Basic understanding of HTML/CSS/JS
-
-### Running Demos
-1. Open desired demo folder
-2. Launch index.html in browser
-3. View source code for implementation details
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
+2. Open any demo HTML file in your browser or use Live Server in VS Code.
 
 ## License
 

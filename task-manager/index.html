@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ch10 Task Manager</title>
+    <link type="text/css" rel="stylesheet" href="task_list.css">
+    <script type="text/javascript" src="library_storage.js"></script>
+    <script type="text/javascript" src="library_tasklist.js"></script>
+    <script type="text/javascript" src="task_list.js"></script>
+</head>
+<body>
+    <main>
+        <h1>Task Manager</h1>
+        <label for="task">Task:</label><br>
+        <input type="text" name="task" id="task"><br>
+        <div class="button-group">
+            <button type="button" class="add-btn" id="add_task">
+                <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5a.75.75 0 0 1 .75.75v5h5a.75.75 0 0 1 0 1.5h-5v5a.75.75 0 0 1-1.5 0v-5h-5a.75.75 0 0 1 0-1.5h5v-5A.75.75 0 0 1 8 1.5z"/></svg>
+                Add Task
+            </button>
+            <button type="button" class="clear-btn" id="clear_tasks">
+                <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.47 2.47a.75.75 0 0 1 1.06 0L8 6.94l4.47-4.47a.75.75 0 1 1 1.06 1.06L9.06 8l4.47 4.47a.75.75 0 0 1-1.06 1.06L8 9.06l-4.47 4.47a.75.75 0 0 1-1.06-1.06L6.94 8 2.47 3.53a.75.75 0 0 1 0-1.06z"/></svg>
+                Clear Tasks
+            </button>
+        </div>
+        <div id="tasks"></div>
+        <div class="clear"></div>
+    </main>
+</body>
+</html>
