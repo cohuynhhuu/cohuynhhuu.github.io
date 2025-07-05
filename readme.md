@@ -52,6 +52,13 @@ Last Updated: June 2025
 │   ├── task_list.js         # Main logic
 │   ├── library_storage.js   # Storage utilities
 │   └── library_tasklist.js  # Task list utilities
+├── lab-auth-localstorage/         # LocalStorage Auth Demo (New)
+│   ├── login.html                # Login page
+│   ├── signup.html               # Signup page
+│   ├── welcome.html              # Welcome page
+│   ├── login.js                  # Login logic
+│   ├── signup.js                 # Signup logic
+│   └── style.css                 # Auth styles
 └── wiki-page/               # Wiki page demo
     └── index.html           # Wiki markup
 ```
@@ -67,6 +74,7 @@ Last Updated: June 2025
 - [Portfolio Demo](portfolio-lab/index.html)
 - [Social Media Links](social-media/index.html)
 - [Task Manager (New Feature!)](task-manager/index.html)
+- [Lab: LocalStorage Auth Demo (New!)](lab-auth-localstorage/login.html)
 - [Wiki Page Demo](wiki-page/index.html)
 
 ## Technologies Used
