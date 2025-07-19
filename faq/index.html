@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript FAQs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="faq-container">
+        <h2 class="faq-title" onclick="toggleFaq(0)">JavaScript FAQs</h2>
+        <ul class="faq-list">
+            <li class="faq-item">
+                <span class="faq-toggle active" onclick="toggleFaq(1)">+</span>
+                <span class="faq-question active" onclick="toggleFaq(1)">What is JavaScript?</span>
+            </li>
+            <li class="faq-item">
+                <span class="faq-toggle" onclick="toggleFaq(2)">+</span>
+                <span class="faq-question" onclick="toggleFaq(2)">What is jQuery?</span>
+            </li>
+            <li class="faq-item">
+                <span class="faq-toggle" onclick="toggleFaq(3)">+</span>
+                <span class="faq-question" onclick="toggleFaq(3)">Why is jQuery becoming so popular?</span>
+            </li>
+        </ul>
+    </div>
+    <script>
+        function toggleFaq(idx) {
+            // idx 0 is for the h2, do nothing or could expand/collapse all
+            if (idx === 0) return;
+            const toggles = document.querySelectorAll('.faq-toggle');
+            const questions = document.querySelectorAll('.faq-question');
+            toggles.forEach((toggle, i) => {
+                if (i + 1 === idx) {
+                    toggle.classList.toggle('active');
+                } else {
+                    toggle.classList.remove('active');
+                }
+            });
+            questions.forEach((q, i) => {
+                if (i + 1 === idx) {
+                    q.classList.toggle('active');
+                } else {
+                    q.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

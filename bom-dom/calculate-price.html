@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bán hàng</title>
+    <style>
+        body {
+            background: #f4f6fb;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .form-container {
+            background: #fff;
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 32px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        label#pro {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+        button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #1e40af;
+        }
+        h3 {
+            font-size: 1.1rem;
+            color: #444;
+            margin: 0;
+        }
+        span#name, span#amount {
+            color: #2563eb;
+            font-weight: bold;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 16px 0;
+        }
+    </style>
+    <script>
+        function display() {
+            
+            //product name & price
+            var pro = document.getElementById("pro");
+            var name = pro.innerText;
+            var price = pro.getAttribute("data-price");
+
+            //product quantity
+            var qty = document.getElementById("qty");
+            var quantity = qty.value;
+
+            //calculate amount
+            var amount = parseFloat(price) * quantity;
+
+            //print kq
+            document.getElementById("name").innerText = name;
+            document.getElementById("amount").innerText = amount;
+        }
+
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <label id="pro" data-price="1950">iPhone 9</label>
+        <input id="qty" type="number" value="1" min="1" />
+        <button onclick="display()">OK</button>
+        <hr />
+        <h3>Name: <span id="name">?</span></h3>
+        <h3>Amount: <span id="amount">?</span></h3>
+    </div>
+</body>
+</html>
