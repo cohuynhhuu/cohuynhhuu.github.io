@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function them(button) {
+            var row = button.parentElement.parentElement.cloneNode(true);
+            var btnXoa = row.getElementsByTagName("button")[0];
+            btnXoa.innerText = "Delete";
+            btnXoa.setAttribute('onclick', 'xoa(this)');
+            btnXoa.className = 'btn-delete';  // Add this line
+
+            document.getElementById("cart").appendChild(row);
+
+            tinhTong();
+        }
+
+        function xoa(button) {
+            var row = button.parentElement.parentElement;
+            document.getElementById("cart").removeChild(row);
+
+            tinhTong();
+        }
+
+        function tinhTong() {
+            var cart = document.getElementById("cart");
+            var rows = cart.getElementsByTagName("tr");
+            var tong = 0;
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                var price = cells[1].innerText.substr(1);
+                tong += 1 * price;
+            }
+            document.getElementById("tong").innerText = tong;
+            if (tong == 0) {
+                document.getElementById("empty").style.display = "";
+                document.getElementById("not-empty").style.display = "none";
+            }
+            else {
+                document.getElementById("empty").style.display = "none";
+                document.getElementById("not-empty").style.display = "";
+
+                if (tong > 6000) {
+                    document.getElementById("tong").style.backgroundColor = "yellow";
+                }
+                else {
+                    document.getElementById("tong").style.backgroundColor = "white";
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h3>Product Menu</h3>
+        <table class="product-table">
+            <tr>
+                <td>iPhone9</td>
+                <td class="price">$2700</td>
+                <td><button class="btn-insert" onclick="them(this)">Add to Cart</button></td>
+            </tr>
+            <tr>
+                <td>Samsung Star</td>
+                <td class="price">$1500</td>
+                <td><button class="btn-insert" onclick="them(this)">Add to Cart</button></td>
+            </tr>
+            <tr>
+                <td>Nokia 2020</td>
+                <td class="price">$1200</td>
+                <td><button class="btn-insert" onclick="them(this)">Add to Cart</button></td>
+            </tr>
+            <tr>
+                <td>Sony Xperia</td>
+                <td class="price">$1700</td>
+                <td><button class="btn-insert" onclick="them(this)">Add to Cart</button></td>
+            </tr>
+        </table>
+
+        <h3>YOUR CART</h3>
+        <h3 id="empty">Your cart is empty</h3>
+        <div id="not-empty" style="display:none;">
+            <table id="cart" class="product-table"></table>
+            <div class="total-container">
+                <h3 style="margin: 0;">TOTAL:</h3>
+                <div>$<span id="tong">0</span></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
