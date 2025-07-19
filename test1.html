@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <title>Using location object</title>
+    <script type="text/javascript">
+        function displayURL() {
+            document.write("-Host name: " + location.hostname + "<br>");
+            document.write("-Protocol: " + location.protocol + "<br>");
+            document.write("-Path: " + location.pathname + "<br>");
+        }
+
+        function replaceURL() {
+            location.replace("http://www.fpt.com.vn");
+        }
+    </script>
+</head>
+
+<body>
+    <form id="f1" action="form_action.asp">
+        <input type="button" value="URL Info" onclick="displayURL()" />
+        <input type="button" value="New URL" onclick="replaceURL()" />
+    </form>
+</body>
+
+</html>
