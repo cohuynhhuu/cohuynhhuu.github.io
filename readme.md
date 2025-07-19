@@ -59,6 +59,8 @@ Last Updated: June 2025
 │   ├── login.js                  # Login logic
 │   ├── signup.js                 # Signup logic
 │   └── style.css                 # Auth styles
+├── bom-dom/                      # DOM Manipulation Demos
+│   └── tictactoe.html           # Interactive Tic-tac-toe Game (New)
 └── wiki-page/               # Wiki page demo
     └── index.html           # Wiki markup
 ```
@@ -75,6 +77,7 @@ Last Updated: June 2025
 - [Social Media Links](social-media/index.html)
 - [Task Manager (New Feature!)](task-manager/index.html)
 - [Lab: LocalStorage Auth Demo (New!)](lab-auth-localstorage/login.html)
+- [Tic-tac-toe Game (New!)](bom-dom/tictactoe.html)
 - [Wiki Page Demo](wiki-page/index.html)
 
 ## Technologies Used
