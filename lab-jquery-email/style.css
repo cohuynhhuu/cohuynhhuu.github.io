@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    background-color: #fff5f2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255, 99, 71, 0.1);
+    width: 100%;
+    max-width: 500px;
+    border: 2px solid rgba(255, 99, 71, 0.2);
+}
+
+h1 {
+    color: #ff6347;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+}
+
+form {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+input[type="email"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus {
+    outline: none;
+    border-color: #ff6347;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#emailForm button {
+    background-color: #ff6347;
+    color: white;
+    width: 100%;
+}
+
+#emailForm button:hover {
+    background-color: #ff4f2b;
+}
+
+#clearAll {
+    display: block;
+    margin: 1rem auto;
+    background-color: transparent;
+    color: #ff6347;
+    border: 2px solid #ff6347;
+}
+
+#clearAll:hover {
+    background-color: #fff5f2;
+}
+
+h2 {
+    color: #333;
+    margin: 1.5rem 0 1rem;
+    font-size: 1.2rem;
+}
+
+#emailList {
+    list-style: none;
+}
+
+#emailList li {
+    background-color: #f8f8f8;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#emailList li:hover {
+    background-color: #fff5f2;
+}
+
+.delete-email {
+    color: #ff6347;
+    background: none;
+    border: none;
+    padding: 0.2rem 0.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.delete-email:hover {
+    color: #ff4f2b;
+}

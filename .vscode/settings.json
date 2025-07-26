@@ -1,0 +1,4 @@
+{
+    "terminal.integrated.fontFamily": "'EnvyCodeR Nerd Font'",
+    "terminal.integrated.shellArgs.windows": "-nologo",
+}

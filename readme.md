@@ -60,7 +60,11 @@ Last Updated: June 2025
 │   ├── signup.js                 # Signup logic
 │   └── style.css                 # Auth styles
 ├── bom-dom/                      # DOM Manipulation Demos
-│   └── tictactoe.html           # Interactive Tic-tac-toe Game (New)
+│   └── tictactoe.html           # Interactive Tic-tac-toe Game
+├── lab-jquery-email/            # jQuery Email Collection Demo
+│   ├── index.html              # Email collector UI
+│   ├── style.css              # Modern styling
+│   └── script.js              # jQuery functionality
 └── wiki-page/               # Wiki page demo
     └── index.html           # Wiki markup
 ```
@@ -78,6 +82,7 @@ Last Updated: June 2025
 - [Task Manager (New Feature!)](task-manager/index.html)
 - [Lab: LocalStorage Auth Demo (New!)](lab-auth-localstorage/login.html)
 - [Tic-tac-toe Game (New!)](bom-dom/tictactoe.html)
+- [jQuery Email Collector (New!)](lab-jquery-email/index.html)
 - [Wiki Page Demo](wiki-page/index.html)
 
 ## Technologies Used

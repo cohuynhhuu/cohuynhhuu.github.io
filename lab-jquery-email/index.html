@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Email Collector</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Email Collector</h1>
+        <form id="emailForm">
+            <label for="email">Enter your email:</label>
+            <input type="email" id="email" placeholder="example@email.com" required>
+            <button type="submit">Add Email</button>
+        </form>
+
+        <button id="clearAll">Remove All Emails</button>
+
+        <h2>Collected Emails: <span id="emailCount">0</span></h2>
+        <ul id="emailList"></ul>
+    </div>
+</body>
+
+</html>
