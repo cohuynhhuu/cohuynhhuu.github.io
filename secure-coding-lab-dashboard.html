@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Coding Lab Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --text: #ffffff;
+    }
+
+    * {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(34, 197, 94, 0.16), transparent 26%),
+        radial-gradient(circle at 85% 14%, rgba(59, 130, 246, 0.16), transparent 24%),
+        radial-gradient(circle at 52% 86%, rgba(239, 68, 68, 0.12), transparent 30%),
+        #0f172a;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(34, 197, 94, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34, 197, 94, 0.06) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 95%);
+      animation: gridFloat 18s linear infinite;
+      opacity: 0.45;
+      z-index: 0;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.92));
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(34, 197, 94, 0.08) inset,
+        0 0 24px rgba(34, 197, 94, 0.08);
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-item {
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      transform: translateX(3px);
+      background: rgba(34, 197, 94, 0.15);
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.2);
+    }
+
+    .nav-item.active {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: rgba(34, 197, 94, 0.45);
+      color: #bbf7d0;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.22);
+    }
+
+    .nav-item[data-page='quiz'] {
+      background: linear-gradient(90deg, rgba(236, 72, 153, 0.24), rgba(59, 130, 246, 0.24), rgba(34, 197, 94, 0.24));
+      border-color: rgba(236, 72, 153, 0.55);
+      color: #fdf4ff;
+      box-shadow: 0 0 18px rgba(236, 72, 153, 0.2);
+      text-shadow: 0 0 8px rgba(244, 114, 182, 0.45);
+    }
+
+    .nav-item[data-page='quiz']:hover {
+      background: linear-gradient(90deg, rgba(236, 72, 153, 0.38), rgba(59, 130, 246, 0.38), rgba(34, 197, 94, 0.35));
+      border-color: rgba(251, 113, 133, 0.8);
+      box-shadow: 0 0 22px rgba(244, 114, 182, 0.33);
+    }
+
+    .nav-item[data-page='quiz'].active {
+      background: linear-gradient(90deg, rgba(236, 72, 153, 0.48), rgba(59, 130, 246, 0.45), rgba(34, 197, 94, 0.42));
+      border-color: rgba(251, 113, 133, 0.95);
+      color: #ffffff;
+      box-shadow: 0 0 26px rgba(244, 114, 182, 0.4);
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.28s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseDanger {
+      0%, 100% { opacity: 1; text-shadow: 0 0 0 rgba(239, 68, 68, 0.7); }
+      50% { opacity: 0.65; text-shadow: 0 0 14px rgba(239, 68, 68, 0.9); }
+    }
+
+    .danger-flash {
+      animation: pulseDanger 0.7s infinite;
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .terminal-line {
+      white-space: pre-wrap;
+      line-height: 1.45;
+    }
+
+    .scroll-thin::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    .scroll-thin::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.6);
+      border-radius: 999px;
+    }
+
+    .card-link:hover {
+      border-color: rgba(34, 197, 94, 0.55);
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+    }
+
+    #contentHost {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cyber-badge {
+      border: 1px solid rgba(34, 197, 94, 0.55);
+      background: rgba(34, 197, 94, 0.12);
+      color: #86efac;
+      text-shadow: 0 0 10px rgba(34, 197, 94, 0.45);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.28);
+    }
+
+    .glitch-title {
+      position: relative;
+      text-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
+    }
+
+    .glitch-title::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: rgba(74, 222, 128, 0.35);
+      transform: translate(1px, -1px);
+      pointer-events: none;
+    }
+
+    .terminal-shell {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .terminal-shell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02) 0px,
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      opacity: 0.5;
+    }
+
+    .terminal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px #22c55e;
+      animation: terminalBlink 1.1s ease-in-out infinite;
+    }
+
+    #terminalOutput {
+      box-shadow: inset 0 0 30px rgba(34, 197, 94, 0.08);
+      border-color: rgba(34, 197, 94, 0.25) !important;
+    }
+
+    button[class*='bg-green-600'] {
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.2);
+    }
+
+    button[class*='bg-red-600'] {
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.2);
+    }
+
+    @keyframes terminalBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    @keyframes gridFloat {
+      from { transform: translateY(0); }
+      to { transform: translateY(42px); }
+    }
+
+    @keyframes cyberRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes cyberRotateReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    @keyframes cyberPulse {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 0.8; }
+    }
+
+    @keyframes cyberBlink {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .status-success { color: #4ade80; }
+    .status-danger { color: #f87171; }
+    .status-info { color: #93c5fd; }
+
+    .deadly-slogan {
+      font-family: 'Share Tech Mono', 'JetBrains Mono', monospace;
+      color: #ef4444;
+      text-shadow:
+        0 0 8px rgba(239, 68, 68, 0.9),
+        0 0 18px rgba(239, 68, 68, 0.7),
+        0 0 30px rgba(127, 29, 29, 0.7);
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .cyber-visual {
+      position: relative;
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      background: linear-gradient(180deg, rgba(2, 6, 23, 0.8), rgba(15, 23, 42, 0.95));
+      overflow: hidden;
+    }
+
+    .cyber-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(34, 197, 94, 0.2), transparent 55%);
+      animation: cyberPulse 3.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .cyber-svg-rotate {
+      transform-origin: center;
+      animation: cyberRotate 12s linear infinite;
+    }
+
+    .cyber-svg-rotate-rev {
+      transform-origin: center;
+      animation: cyberRotateReverse 8s linear infinite;
+    }
+
+    .cyber-dot {
+      animation: cyberBlink 1.4s ease-in-out infinite;
+    }
+
+    .presentation-toggle {
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      background: rgba(34, 197, 94, 0.14);
+      color: #bbf7d0;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.2);
+    }
+
+    .ultra-toggle {
+      border: 1px solid rgba(96, 165, 250, 0.55);
+      background: rgba(37, 99, 235, 0.18);
+      color: #bfdbfe;
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.22);
+    }
+
+    .mode-btn-active {
+      outline: 2px solid rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .mode-icon-btn {
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .btec-logo {
+      width: 160px;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 8px;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.22));
+    }
+
+    .theory-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.76);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      padding: 16px;
+    }
+
+    .theory-modal-backdrop.show {
+      display: flex;
+    }
+
+    .theory-modal {
+      width: min(1240px, 100%);
+      max-height: min(94vh, 1040px);
+      overflow: auto;
+      border-radius: 14px;
+    }
+
+    #theoryTitle {
+      font-size: 1.5rem;
+      line-height: 1.25;
+    }
+
+    .theory-modal .font-semibold {
+      font-size: 1.07rem;
+    }
+
+    .theory-modal ul,
+    .theory-modal p {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .theory-modal pre {
+      font-size: 0.94rem;
+      line-height: 1.6;
+    }
+
+    .theory-modal button {
+      font-size: 0.98rem;
+    }
+
+    .quiz-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 70;
+      padding: 16px;
+    }
+
+    .quiz-modal-backdrop.show {
+      display: flex;
+    }
+
+    .quiz-modal {
+      width: min(1360px, 100%);
+      max-height: min(95vh, 1080px);
+      overflow: auto;
+      border-radius: 16px;
+      position: relative;
+    }
+
+    .quiz-modal > *:not(.quiz-fireworks) {
+      position: relative;
+      z-index: 1;
+    }
+
+    #quizProgress {
+      font-size: 1.35rem;
+    }
+
+    #quizQuestionText {
+      font-size: 2.05rem;
+      line-height: 1.45;
+    }
+
+    .quiz-option {
+      text-align: left;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.75);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 1.32rem;
+      line-height: 1.6;
+      transition: all 0.18s ease;
+    }
+
+    .quiz-option:hover {
+      border-color: rgba(34, 197, 94, 0.55);
+      background: rgba(34, 197, 94, 0.08);
+    }
+
+    .quiz-status {
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.75rem !important;
+      line-height: 1.4;
+      opacity: 1;
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    #quizModal .panel.rounded-lg.p-4.mt-3 {
+      padding: 1.4rem;
+    }
+
+    #quizModal #quizTitle {
+      font-size: 2.35rem;
+      line-height: 1.2;
+    }
+
+    #quizModal #btnCloseQuizModal,
+    #quizModal #btnViewAnswer,
+    #quizModal #btnNextQuestion {
+      font-size: 1.2rem;
+      padding: 0.8rem 1.05rem;
+    }
+
+    .quiz-status.fade-out {
+      opacity: 0;
+      transform: translateY(-2px);
+    }
+
+    .quiz-fireworks {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 30;
+    }
+
+    .confetti {
+      position: absolute;
+      font-size: 19px;
+      opacity: 0;
+      animation: confettiArc 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+      z-index: 31;
+    }
+
+    .confetti-cannon {
+      position: absolute;
+      bottom: 14px;
+      font-size: 32px;
+      opacity: 0.92;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+      animation: cannonGlow 2s ease-in-out infinite;
+      z-index: 32;
+    }
+
+    .confetti-cannon.left {
+      left: 20px;
+      transform: scaleX(-1) rotate(-18deg);
+    }
+
+    .confetti-cannon.right {
+      right: 20px;
+      transform: rotate(-18deg);
+    }
+
+    @keyframes confettiArc {
+      0% {
+        transform: translate(0, 0) scale(0.78) rotate(0deg);
+        opacity: 0;
+      }
+      18% {
+        opacity: 1;
+      }
+      48% {
+        transform: translate(var(--x-mid, 0px), var(--y-mid, -140px)) scale(1) rotate(140deg);
+        opacity: 0.98;
+      }
+      100% {
+        transform: translate(var(--x-end, 0px), var(--y-end, 210px)) scale(0.92) rotate(var(--rot-end, 420deg));
+        opacity: 0;
+      }
+    }
+
+    @keyframes cannonGlow {
+      0%, 100% { opacity: 0.78; }
+      50% { opacity: 1; }
+    }
+
+    body.presentation-mode .h-screen {
+      grid-template-columns: 1fr !important;
+      padding: 10px;
+      gap: 10px;
+    }
+
+    body.presentation-mode aside {
+      display: none;
+    }
+
+    body.presentation-mode #contentHost {
+      padding: 1.75rem;
+      font-size: 1.08rem;
+    }
+
+    body.presentation-mode h2 {
+      font-size: 2rem !important;
+      line-height: 1.2;
+    }
+
+    body.presentation-mode h3,
+    body.presentation-mode button,
+    body.presentation-mode input,
+    body.presentation-mode label,
+    body.presentation-mode p,
+    body.presentation-mode td,
+    body.presentation-mode th,
+    body.presentation-mode pre {
+      font-size: 1.02rem !important;
+    }
+
+    body.presentation-mode #terminalOutput {
+      height: 220px;
+      font-size: 1.03rem !important;
+      line-height: 1.55;
+    }
+
+    body.presentation-mode .card-link p,
+    body.presentation-mode .text-xs {
+      font-size: 0.9rem !important;
+    }
+
+    body.ultra-presentation-mode .h-screen {
+      grid-template-columns: 1fr !important;
+      padding: 6px;
+      gap: 8px;
+    }
+
+    body.ultra-presentation-mode aside {
+      display: none;
+    }
+
+    body.ultra-presentation-mode #contentHost {
+      padding: 2rem;
+      font-size: 1.2rem;
+    }
+
+    body.ultra-presentation-mode h2 {
+      font-size: 2.35rem !important;
+      line-height: 1.18;
+    }
+
+    body.ultra-presentation-mode h3,
+    body.ultra-presentation-mode button,
+    body.ultra-presentation-mode input,
+    body.ultra-presentation-mode label,
+    body.ultra-presentation-mode p,
+    body.ultra-presentation-mode td,
+    body.ultra-presentation-mode th,
+    body.ultra-presentation-mode pre {
+      font-size: 1.16rem !important;
+    }
+
+    body.ultra-presentation-mode #terminalOutput {
+      height: 300px;
+      font-size: 1.2rem !important;
+      line-height: 1.65;
+    }
+
+    body.ultra-presentation-mode .card-link p,
+    body.ultra-presentation-mode .text-xs {
+      font-size: 1rem !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-white">
+  <div class="h-screen grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-4 p-4">
+    <aside class="panel rounded-2xl p-4 flex flex-col gap-3">
+      <div class="text-center">
+        <p class="deadly-slogan text-lg text-center mt-1">HACK ME IF YOU CAN!</p>
+        <h1 class="text-lg font-bold text-green-400"><< Secure Coding Lab >></h1>
+        <!-- <p class="text-xs text-slate-400 mt-1">WORKSHOP DEMO CONTROL PANEL</p> -->
+        <div class="cyber-badge inline-flex mt-3 text-[10px] px-2 py-1 rounded-full font-semibold tracking-wider">LIVE ATTACK SIMULATION</div>
+      </div>
+
+      <nav class="flex flex-col gap-2 text-sm mt-2" id="navMenu">
+        <button class="nav-item active text-left px-3 py-2 rounded-lg border border-slate-700" data-page="dashboard">Dashboard</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="password">Password Security</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="validation">Input Validation</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="sql">SQL Injection</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="xss">XSS Attack</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="mfa">MFA Demo</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="logs">Security Logs</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="quiz">Quiz!</button>
+      </nav>
+
+      <div class="mt-auto text-[11px] text-slate-500 text-center">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfAAAAEuCAYAAABxmEC5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAALMpJREFUeNrsnWGMJMd134vUKYQk4m5MCYoSmbm5mLZhkMbNfYhtWgZ2FjAQOAKyu4KCwKbjmzUQgB+S3C0SAzZNY3cBhkECJLuHOALjfNi5AIRiRPDOBmGcALZ2zohEW/6wcxCJwKLE6xPlRCEkao6gqNA8mqk3W03W9nbPdM90V1d3/35AY+9muqerq6vqX+9V1SulAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAJfeQBeXxxtMrLf1nVR9tfVzUR6CPO/oY3P/EwYgcAgAABNw/8d7Sf67oo5VwylAfGwg5AAAg4P5Y3Yf66KQ4fWxEvE/OAQCAzb1kgXP2U4q3Mtb5nhb9DtkGAAAIeHnWd0//6c4p+gAAAAh4SWzOeV1bi/8q2QcAAAi4e+tb3ODtBX5ihVwEAAAE3D2tBa9vk4UAAICAAwAAIOAAAACAgNeToOTrAQAAAYes3P/EgQjwIlHVDshFAABAwMthe87rRroDMCD7AAAAAS/HChcR7me8TMKprpN7AACAgJfLhj7SWtMi3stsaAIAAFHYzKQk3nh65ao6jsyWtD5cLPVtM3YOAACAgHsm5BIi1d6sRAR7iHADAAAAAAAAAAAAAAAAAAAAAAAAAACAlzALPYG3nn2yrY6XeckscXupV18f1+577CnWZgMAAAJ+9/aLXf1nR72/pEoEcuPM+YeHJYh3z6Rl2h7e61rE+xQhAABorIBr8RYrdz/h6zUt4s7igGvxlo7EYcrT17SIE6McAACc40so1Z05vyuCvZzSDQAAUF8B19a3uMzbU05pm3NcWN+z0nIqbfqaVYoRAAA00QJv5XROHnTnuKZDMQIAANec8SANM2dzO5zI1mpiIbjz+EMtjzoiwblnvh54kCc9lc0bA/H0s75P8j4ZnZdb5AJ4I+BanMd3b7+4q/95NeGUXZfi0SDR7uo/l9Wx16HtWdrkz9h07uSd3NTHUDdeLpfuhXkDizGco16R98nUXsB1/W9naJNGul0YI+DliviGFnEVI+K78p3jxiYrgwUKqoyfLxnrN7SCR0a8bshv5y1apnLI5Dvfx+5b0UZcpz0w+X3dsZgDQL7tUNjeSR0/bwQ7bAcX7fDfNm157cXdq0AuWsTtnlegxdu5RfzWs08eZuj9j+577KlLcxS4njoOEpOmlykFcVsXxGEOlUYqyKGqx1CBlI1r6thFOy6ggclSDiCZ5axll7xPRudlJYNvGcEODZaucuf1C0wbGhpEtRL0M14l5liwg5KTsa6PoxQiNzbnZi3E+xkbJzm3q6/d1YVvY4EKVCfxVqYBEE/Cpn42EfLdJrvSADwU7bYR7ZUSO2SShp459nSaxEq/bsQ8qHoe30sxO4m2qOWlLs/oSIhQLGcJp2rEexHL4qr+jSPzO/P0fusk3jYt4804MkMSAFCucK/qQwyVW6aT3fUoeR2TpluSRjMXCAGvmYiLMItrXCzeoRHssfm3fHZhTvHu5FT4srKv6j/DXnra+6ZStijFAE5Fu6WPLX3cMu1NFTrTksZDSbMZ1qwcbGbipnCL6F7N8Sdl3Hc95b0lslyvYVke6GNtkYlujMPmBmPgOeLbGLjpLEvbdqUGRoK0G+t5zDfCAq+PeLdzFm+hJ42cGddOuq+Mmx81ULxDa/wQlzpAoW3bljp2k2+qenj4wnbj0LTb3nOGYlg4mwX9rlgoR2ZSxoF6PyCOiPqKIkLcZMKgzh/pUfcphgC5Cbe0PXuqvsF2wrZVVv/s+pxQBLx4irYCO4j1VGTmqULEARYW7pYR7iZ4tuRZd/QzizG05usKl1q60O8+/4WuPrb0cVUfnRILfFc1NDyrZ+xMG24AgFRt2a2GiHfUGr/la/tRKwHXYr2qDylkMglGXNcyeexIf3aoj3YJSWpT9b3pTR8yOx1gLvHeUvVdhpq2/TjycaZ6bQRcxFsdL19oJ/SiRMhdF0AE3K9KuEc2AKQW7pZZEbBJbkzY803E62SBz1of3VLzraGG+rDKzHSAVOIdRm7skhunRNwbQ6AWAi5j3imtXdeNd0B597IC4koHmC3ezBuJp2eGFRDwnGinPM91w42A+0cYeAIAksWbTu50Nn1wp9dFwL2c4m8i+rDBhn9cIQsAEO8F2St7SK4uAj7K+bw8GVDO/bPCqxr7GADx9k7ESxtqqIWAn3n0s0FKobxWQvK2C/pdsewlStCaOt49bdn8H4s/HStkAQDivagxoEqcV1OnWejrMyzsvhb6vutEmT1n8w7HJ52VC7I/uD5kX9uhOSY7pWH1p2KVyWyAeL8XXY26MD/z7hKJgFtW+NhYoWLxBtZXIupr+vv1EpO3rfJz38tOZImh/eRz+V7Oo17NpEsWQMPZV8w2z4NeGePhtYqFbkR8yxzeIKKqX650LhZdmjFMu42oOt63fJWe9cyeM94KaKr1vUUnNlfElT50GTedzUzci/i8mwHsGhd5lvuJFe5iydSi4/wXVTkxlpdmdIBcdn5cueGWHefxyNMqKXXjeoPFW4SbCGv5Eg5HrCHgNRVxebnG1SKNdTuN1S0COecm8wcuBFynbSuHBqVt8mTVcYVLeianwiM7pjkqg0Nq4oTbTc0La9y7CowjncCO8turKHNruq7KFgI+g7eefbKnjmcsr0YKlbyga/c99lTmFyUTz/SfgZn9uZpgCd6QcxYUkqBCnZvAdG6kYek5tHoBmsam8m+fhrBNvWEEezTNFW06IeFWyqEHzwdhH7lsd++hLCcKtxQGmeDRTWEhr2kh93L5li7o7zoQ33tyTvO+K0s877Qv8MxSzg6b8rwz8sJFDO7tPDxHFbS+nZSzDKItxsy1PDxexiC6bAyAMsTceZnywgK/e/tFKVRXrEyXHsz1M+cfHpaRHi3e0js9SlkIJhVCX7Psq4hXkA3VvH2HAVzgw4ZO0r7LvJlBnhO+TCdgpIV824j4piMhl+dZL2NIpvRlZFq890yPcNWIYddk/qH+rqzCtp/xxXfMNZBPRQwUs8MB8ra+e6rcYaOxEe5Luo73i5qtbZbSSuyNC6q4QFohffM8pRibpQq4Fuiravp451V9Ts+x9T1vIe/qa7s0E7lx01HPGaAJ4l32dsojI3RbrpZZGSHfkvuq/FdDTCYky7Jel8vGfLPAN3M6J08uL3Atm2RUCwQcmoIYS2VN8pIlsJeMZ805xrUuyyfz8uoNTWekdC9haQJuxr3TFKi2Ptel22cRK5pxWwQcwEfKMi7Ws8SvKNgazyNCpUxUWy6rM+KbBZ4WJz1HM3kN/MDFZiM3yGaoO2bsuwzrW8S771NemEiW86QpMFb3lk/PU6aAjzNmHjSnwZGOlAuvy5DchgZQRsQ178Q7IuJZ3N99I97eRRUsTcDPnH847YL3oT7XiYDf99hTdBT8wEWUqMAXNxhAgZ3hrnIftGXbV/G2Oxgp9MeLiWq+WuBCmrGRbcdpWqSXxdKnxRscEe+ug1tdJ7ehAVx2fL9hFQLkhGGtpz2HOt6y2es2vVQB15b1wPSExkm9nxKCuVxb4NoD2ov5LQV9SPCcnqNb9sl1aAAuJ9bOEkXfRHyUYCBumIlq3gfmKj0Smxbo/t3bLw7UyfB3knF9/Z3zDLzvsaf6bz37pMzYzDoGO5RrGyq+i/S4z6v3Yxq7oo/7HBpQL+021QUbVRC9iIhv6XwSL0VbHXtf130c6/ZWwI2Iy0vf9ShfxCtwmKHwj801TaVq2xJuK4D6s+TwXsMKjHtPa+9l1ct21Tog7EYWb4WPJLa5Op5MNcsylN7aWh4T4N54eqUbdgjuf+JgxJsohF2sb2gILt3nle0UmzCowyqmHQGfIuL6zyUTWjXOpS7fX1vEba4FWyx8iZAUunDs7+SPDC0caDHv80ZyIcD6BsPlO48/tORx+q4vYtGanblcuc+H7DOPgPsq5FKJJhUpDPSSk7Utwj1rtxzpQa/qc0XgN7DKF2a9ai4yKIy28m9PbJtFgwy5tL5Z0YGAV0LMgzx+RwuyuOZ7GS7p6uNQX7eMiM/NNlYCNIiLju4zrvDYd+W5lyxwyxziHdIyIt4hFzPTr8LaVIAc6bqqW2Q1Fnju3H3+CyJ04kYKx7nEcj048+hnS7PCtPiuqsXWOYuISwfgEkU3k3ivkw3QFEwoYlfj38S+wALPVbhb+tjX/5SgIJumJyqHjDkf6u/kaJeUvDz24+3ojkCPoot4AyTgqn0bMyyFgOcq3up4/fa0CRwi5keuRdxY33ndk33HEW+AaW2cC5iPg4DniljcacaIQ1e0S/JcsiJWeJviO5XVO48/dJVsgAZyztF92I4XAc/V+u5l6aWacXJX5H0vBHx2J21H4qubMUGApuCqXRuS1Qh4noU268SNVYpAIxozEXHeNUC+BGQBAp4XXV4nTLHG9xfcdAUAC9yCkMQIeJ4QYQtmsWn2Gweoe4eV9hYBrxRDzwth3hM+mAE6Hz1EHID2BwH3iDOPflYKVJDxsoHDJOZ5r+H9TxzQA0bEAQABrw0bGc7d1qIfuEqYiWE+zOnnrlF0cxHxLbIBABBwP6xwsXLTBO/o63PLaLw3cvgNsb4HFN1c2GR2OgAg4P6IeF//WVPx7nT5bEOfU0qELmOFL3LvsXk2yI89LeItsgEAKqd3tXyoY0t8YMKltkPxM+PkpaJFvP/G0ysT4ch46UT8GfvOnckSM30skxUAgID7I+SB8jDYgBHxwIh4O8Ulu/rYRrwLoyuu9HPPfJ2hCYCUdYYsQMAbixbjof5zwWxysmIqhC3m8r0sPevrcwPPH2c7p9+RGM6dkhoH2SkOAYc6IB19hoUQ8Oby1rNPSgWQzTAuW8IamEb+2n2PPZWLqJoJaZUWDm25buX5e2ZMuqeOd11rO3qMtr5vTz9Ln9IPFWfkohOs60tH1xfWg5eIN5PY7t5+saOPfX28q4/vmX93ykiLFm+57y11vLuZLSBtI+pH+pwexaewDoHsMyzDBpfU8fCBKzbJfYD0nV6yAAtcxFt6i4fWR2KBiWu5q79bPnP+YWe9PCPeh2q6C2qyHak+N9CW+JBiVJyQ6z8buqd/U7nZ/hUrvDlIvb3hefq8tsDV8XAXw05NF/ApjXM4Q/iCw7TsqPTjR3uO09ZUIe9rYVWORFzmIyDg9edG3kM/HnHH0X2WKEblUroL3bjJ29OsIleudGN9Z+m5tvU1XYqRGxFXbtzpq6wLhxp4F1xA29d0AU9p7bY8LpAUYnfIbHcXS+mIzgZVJnBm6hPJsPECPsrpHFedCSjPChfxdhEHHtcgVLmeBMrdTosr5HiDBfzM+YeloE1zje6ac1xAoBT/6Tu4R5dshoozdHQfLPCGW+CCuEbjZjMOVH5BQooq9EOKkXPromiPTJuchorjaoZ9S1ZukN0NFnCxsPUhm3RcMoItxyX5zKH1re577KmsW36yjKwcgqJvoBslrHDAAk/HZbK72RZ4KOQjfWyZo6wIP7LlZ9pOwzpFqBRukgUAyZgIaa6Mn27VO7yy8kQf39PHDgJeYYwVvjyj8Mt361jftaZDFkDFcRlkpepRDCXGxCR8thbxIwkTi4BXW8QlQIu48gPrK/n3JMSnPqdPTpXGRQf3YEUCVJ0Dh/fqVnUs3CyFW4103kXEt3xPO5uZJIu4WNlb5iiMN55eaUWsvfH9TxywQQDWMcBCyPa4WoRc7ky2o+83MMs9qyLeLZUc4XFTfy/L5NbM5FkEHN4T7q46djt1Y74L1zvvsgf4qQrXVswSB0iLuNFdWcahGK5VKH/2Z3RwQmt822yw5BW40MsRb7HqD1XyeuOWEfdDfS7W5kmuOLrPkKyGGnDd8f0kFPHVihgDOypdzIeW8S4cGgMCAW+weO+o9BM+OkbEGY993/rukRMA6dBWo3REA8e33fF9VroZr8/a0egaa9yb4DUIuFvx7s5RaKaN0TSNcKaoCwKyG2rCdgn33Pd1JrcR73nb1JZ5tn0fNj1CwN0y71KL1aa70nVl2VPuQpyOfZ20AjCHFd5X7sNEi7gd+maJG/HOY623WOG3yrbGayngd5//QkcfXXO0PbG+WwsKUGOjHRnx7jm8JasAoG5cK+GeoYj3fMgAy/Ju5fh8YonvlGWN10rAjXDf0v88UseTxOS4pT/b10fZ7o5OyddXUbjbMnFEuR/3vqEA6sWuKm+zpj3phJfpcjYT1ooaipRh0aMyvA21EXARbyPYcRa3uDkOPRBxSFfZVo3VLZ2xbglJGPAWoE6YtdkbJSahp0qYACbj8BJZTWWfe5SVtvE2bLl8vjqtA0+znk9e4hbVOfdKcpjjz3VLfpzAxJGGeiNBOiob/lOX0XvmuKavn/mKKs+bJyInLueh/rttZsgX1SbJvTaVe+9dGPxl3UU7UgsBN9Z3O8WpV0oU8HHJ1xdJV9WH6wqgvogVflhyGqS9kNCrInAyNp9b9Dbjxr6syl1uGgZ/uVD0ZNi6WOBpe5SludAlPKqJsDZvGg4UuKBPFkBdEatXC4uMh/sQbEXabRkqk/FxGbaSuSejLJa5sbRFtJfM37YnWT10sZKlLgJelXCj0tvcnPP5GJd1IN4sH4MGIOvCV5VfIYnf21BEi7L8CdT7sRjsSaVLljHm68TeyW6VLm5UFwFPO9ZQduMsPd+VOQreOjHRnTVsAHW3wsdaJEVgDj1OZtvqYHSr1o64MgRqMQv9zKOflcwa+t5AGxFez+gxEPHG+nbQucL6hgaJ+JAOayEMXW56Uqd14GszLPG+Fvp+2Yk0W4XKXuOzRFlEfk2f36dOFM6YxgwaKOJbik178m5HnO7EVhsB1+Ismbesjich2RauWFUb+vt1X9Iqlrg+5EVfUsdu9aF1DIyVfgHL2xnrVdrDGMCh4QMZ8tJ1O1Kr/cCNiK8rRxMIcrLGqTzlIhPX6ChBU61wezycQFfzs1HkuvbaW+AAcyCdpw2yARou4lIPxHuJF2p+I2C3jBsj4NBUJkMuuM4BEPEFkCA0pXl8EXBAvAEAEc+O5Fepw7UIODRVvJl7AICILyLepRsBCDg0sdIh3gCzRTwgN2IZKk88eAg4NK3SId4A6UT8kmKVTBSZsObN8BsCDk1g26dKB1ARER/rI4xVAcdLxbxaooyAQ50JjNW9RVYAzC3kstRSAr40tQMczpvxriODgENdK5xY3RfKCK4AUEMRl2BHaUJA1w1pP7xtR85QNKFm9JXD3YAAGiTik1jfdx5/SLb93FF+bUdalBHg9fABFjjUprKZnvI64g1QuDV+ydS5OrrV+6Yt8X7sHwscqow0JAe6ovXJCgDn1viWtsal7m3qo1eDxxoaq3tYlQQj4FAlAlPJbqjjEIbMKgcoV8ilTq5rId82In5FVW9TlMoJNwIOPlemEBFqEenJrm01F+yxYm/mENYeV1PIxSIXt/OqEfKO5/VtoCo+X+Yeih4AAOSNFvO2EXIR9LYnyarVsBsCDgAALsRchHxJH13lzs0u3pyhPm6YyXe1AgEHAADXgi7udTkumr/tHKx0EWpxjd80/677sBsCDgAAXlnqtpB3Yqz1kbKWrxGsCQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXHEPWQAAefL6xo929R85zuujXfDtNs7uvDQi16GJnCELACAH0e7oP1f0saqPlsNbB+Q+IOAAANmFWyzsPWNxu2akre8xbwGayr1kAQDMKd49/eeoJPGeCDhvAbDAAQCyibdY3b2Sk3GDNwFY4AAA1RJvYcjbAAQcACCdeF/1RLzHZ3deCngjgIADAMwWb5lpvuNJcrC+AQEnCwAgJXsepYXxb0DAyQIASGF99/SfjkdJYgY6IOBkAQCkYNOnxJzdeWnIKwEEHABguvUtlnfboyQh3gCKdeAAleGBxw+65p/dIu/z2jMrW5GPVj3LirnHvz9+8GknefjqynNblFhAwAGaK9gtI54rDkVUxpaj4rPkWdakHv/Wgh3m4WXlLmIcHgJAwAEaLN4iorI5SMvxrePEsetZ9swUSCPcV0vKQ2bIAwIO0EDhlvHmfVXemPMJ8THj315Z37M2MDFu8r0S8xALHJzAJDYAf8S7p443B2mXmIyh59b3aIZ4Sx4elpyHLHEDLHCAhol32YFSxq89sxJEPvNt/PvGFPH2IUb76NWV59jiFLDAARDvUq1vwTcX+nCK5d3zNX0ACDhA/cTbp/ji0fHvtvJr/XfsBibWmLcP3KRUAwIO0AxEeFqepCU6dtv13fo2s833fE4jAAIOUD/ru6c8clG/9sxKVHwuepZlcePfVz3yEgSvrjwXULIBAQeoPz7FF4+zHH2zwEcx1vcVX9MHgIAD1Nf6bnuUpOj4d0t5NoEtZgMTibDW8jUPARBwgHqy4rN1q6ox+/xKBdIIgIAD1Iyu5+LjW/pOWLfGfe5VJ+PVledwoYNTCOQC4BizdGym6/eRHz6nPt35RCFp+Jf/9c9OWN+vPbMSDT5yKoDLvQ98Un3wb30m97S88+f/S9194Q+yeghOdTB+7cd/qZC8+uabr6r//u3n1Z23v4/1DQg4ANb3dOF++u89oj71Yx8t5OYvfOvOKQFPk8YP/MhPq7/yt/9xIWn6Sy3iP/hPvz75m1IgT3QwHjn3N9U/K0jAhTtv/0P1mS//hnrhzsupPAQALsCFDuCexPCkv/jog+rGby4VJt7CM198ear4JG1gcu8nf6K4hkj/9ofWP6fu+dDZWOs7ZgOTE2k8+8GPFPrCzunf/72f/RfqwQ//VSxwQMABsMBP8ncufkL99q9cKvTGYn1//vlXZolPbPrO/MhPFdsYPfBJdeaRn48V8Fl5+OXvfLXwlyYiPsVNz/g3IOAAdeaBxw/aKmb8+9yHPqh++3Lx4v13/82Xox+n2sBELOMiLfCQDzwU20mITmCL7WD87it/WHj6Hvzwx2PFmw1MoAwaNwauG9ATs1ft6FPTvoNaCGfbEq2yLKZY8RHXuYh4Ufy3m99W/+j6kbrzg7dnWd9KxczudiHeYUchhlQegt964XfUw2cvTMbDHTOsQPk/tPJtqMv/co3b965pvwcIeP2QxunQbjNSfmcH3xgi7s4r5qJ5L9dvWg1uWQ1Y7Pj3p37sY7Eni+C+8Mrrc9/sm999U33+j19RX/rad5JOSbWByTT3+Tvf+Ep2Szvh92ImscVtYBIb4lVmictEs7//4M+rX/hrP3Pq+7NnPpIo7jI57fW735/txYifxHYzpzIem/dJ0AbFchh2QHV+DnQerSHgfltVPeujQL+wfkH3kpjL4a5Rm/r/F2Jcj0Dep+lAnuKRHz4bbzmPtOX8H4+KTE+qDUw+8NBPJ4r3m//ulzPdUKz5j/zTg/jfOy3gw7RejFDEf+flg8kR5Rc+8TOq/1NPxl73Wy/+h0XG0fMSUruTmcph0dD2QKzsVdOZD6bUr1UscL+RSExXIy93ELOmNQ+i45bSeUDA3TAz783aamnYz+v3v+Fxw3NKwP/GRz88OeL40kvfKTRNaTcwSbKY30le9pXc6GSz5qPj36nW0Md2kqa41hcQbzYwcWuw7VjCvBzTBgeWF6P2HoqqC3gv5jN5uUVY4QPTYZDGY4T7yilT815X7C110j3uK7GW47QlY1/62neLTE8q63ba+Pc7X/+TzDdNsubFff7uD16f5SGYO/raz37sJ+PF+7sLzWAfOX4/TaadwqpeNrowLkgHEPCcemNJGxmsFPHizKSnH6IOuadGeZ/gPj8Xe7KMf8sYdoGk2sAk7/Hve/96fIfgnf992pqP2cBkaW4B/+hP5m19n8rDnMv9MrU/c56JBb7VlOetsgW+ErHQwp7ZqrgqC3KjAyxCrPj83BQL/L9sfGrum331W3fUb/7nF7JYj50sFrPwoV/9XHYBf+CTCdb8V+byECxifU+8HItZ4FjJp42ryTBHGi+lNaxUysoQff/uvPc2107qUVl6U2UBt10p100haFvf9XN+0fLbPauntxVTELsmHXZDPTa99EHSxCvz212T/qWYHv4gTQEzXokVKx8C6/pxQgFcsRruMK39LAXS/E5YmKUy7GbNPysP7TkNko4g6VrrvnaetY1LffL8SZMaTV4tWc9+w1TEIpeenBIfWTqWZIHLd4tEZBMBzyg+3SwW80Tccwzu8s43/mSqdWs2MGnP89uPnE0e/34xOTzqTHzbwMSs1lgx77JltQOtKedftoRoI0GQd6yPNqLtkTln026X9WfhvaVObUubYtXlpWh5s86X9nw3bIOs+0efYUd/F7ZT16Wu6//vWHU66Xnk/lfsDqu5t6TzWlzHw6ThstXGq5i0D0w6nC1fq6SAR9znIhgD/dmS1fhfUfm70dvq5AzRrcjLPVTJk2tWTWFbjwqK/mxPxY/l242qzLyWQrWWIMSStv0EC6pn0n0hIpT7CQ32qrnfRoYZ/WM7b8xEwiDudyPnxM2A3rTe69aMvO+q07N27XOHCeWgG/PsXZMuSdNy3j1qq7d+UlgePFdYPfn3X5wqTKk3MEmymPNENjP5y9f+fJaHoDvv7ydZ4LIsbMYmJZWwvmfU6faMdm1WvrYi57RiBHFvyu9Lu3xg8mtzRnsX1t8V/bthPWwlpLET09nrJD3PjDwK2yjx4O7GCH+apSDh9WJ4rLt471WNxBZ1n4dW+Hsv1oiaE2KEaGgdNntG7NNWrmjjtZ9QKA/V9Mk912PO70YayqER4rCC7iWJTsLzBzMa2qUUjfGSB41jNBZAnr97ip8rKOb5v3ruz2aNn6fewMQFbw3+eRqBnHv8O8kCX3ACmxcbmCTUabteBwUbU3sxHfqhVcYCy6o9sM6ZWObWEUTqy07C70WfL+0z7kXyaJzQTl81nZJpBFPu3UtxfXMtcHXSfX4QiojOtECddKPvOkzTtimogxnWsXgHknpnfeNqChKu7UoHINJh2Il0AgbGxRW6njcj+XDVdjFJWsLfMw3BjtVD3rMt9xTWSM9qaPszxGEl5v2ceq8zOg5iiW9FZ6GnmPwTmDwaWB6UPStfpAPYzXmlQXwAlx/9WO4FUWKdR3Ybmyk+ZWxgEvL/Pv/rsdb3rA1M0iIbkCSEQNUW+K1Fkl5oJ3NGB9r2oGxG8kbq85rtBYtEYsuTnWg7aA+PRYPTGG/peoJ3T+ryvtUOrFrt07LJD7tzvZG2jpprVyN5tBxx09te1J0pS5K3Y4ZQo16IQiZTV94CNxl1wn0eY40Ll12mS8Z948Y+TCW6ltLivm1XOvPv5SQhjAlkM4k8FP6G/BVXjlVIW6YDEbJudwbMeRuWJd6O8RgkcZAk1qbytKxeb9w57ZiOSFGc6GiFDUQKD8EixP5enruOyax1CfqSMvDLME36itzARJaMiXi//ae/N7eHIA1Js89zsMCLHv8+nHJ0rDrdi3ROl10EOrKiI9rtz1a0/YuK7IyhObutbOXoSb0SsbxPDJOZNsCO2hbN11ntfz9SHrrKAVW0wFemNPLX1fvj4BM3uicRu+ZOg5n4MbJ62K0Ei1UZ8Z0lIi2rso2m3K9rXZOmobIraTuS993Ieauh+80S0m6CdeGqAzY28wxyr3hJG5gkTV6bWIbfuqPuvHk31e/LZDU5X6K2xcQ6j2PhDUwmY9ZzBHEJEYtbfiNm3XeshyBpA5M0PHIu3on0ypuv6uP/zi3enmxg0o2UrW2HdWcpY/szD22VzxDAaqSjMY5pA4YRL648XxYv7kFCO42AW73NRDerB270cEwonIneVnPOmo02uAmfn4+I3qyCblvTN2Os3zDKVSfSE00rgPZyvq7lQlqxnmPbOmfJ6oQtJb3XGhArPtPGv2XXsJRiPA/DGWVjwjT3+V/80fW5grgskMa5BTzJAn/h9ZfzzkMX7ynaJkTfm8sNPOy2LchiLFmrdsKVIHm1lXH36kzrHMZ4VdpJdcI3qmaBRy3Occw4kf0CLrsScCPcO0UVwhSCnLXXfVmneSXnQnrDekeTMaBI+NBhpJPVTWig67aLUKYNTCbWd3HifaoBm2sDk2LFO/UGJrOQPbyTQqguGMDlZtGFJmUgl3PRjnRJ7U8W8d5S70dWdEH0PsGM97oa00FBwHNgJfL/WbOFOzGTvooQ7546OYEhnGF52/Sio+sofSCucAbmkPy6Y/5mybuB9ZzdmE7XgWVZ9NTJ1QJtqyc/UvUi0wYm/7PY8KlK5bCBSQmW51wW+MPT4p/XI4BLZ8p7dS2MadrKuGWzQ6vNkQ7JVQX1EvAY93lqS9NBwbbFua+OZ0eOrbQXdd9ggcok1143lSeXKEhm5ns4Xt8yrqu4pWE3rErcjaR9WKcKNs8GJi/MDsCy6HsaprFuEzcwKdb6PuUhWGQDk09NmcD2wvwBXHzawOSG1blx7fIdZbmnMXR6M9rKbskCfq5K7UuVLPCoeG/PsNQ71nWF7U4Vhg20Ptpw6Ma6HfE2zAohG0Qa8q2CrKeOJc5h42KP0Q8sj0XUq9KI8e9Kb2CywOS1OT0ETdrAZNH2yOXE3XFGD4ndmR+5Cnai4j1OwxQeDe+NiSotI7sSeflbSYeKLNvKsBRqHloRUXQ5BhUdK561l/Awki/dAtJ0PeL9aEfvbfJoZFWYjvVd3ca/M21gIta3zxuYyKxxmT1eJC42MPn9//PHueVhyUTzqpd3ZzNtPqQIXtIuQxxNexNEDLzYzo86HeAKAc+jVxlpZK5nFLYi14SPMhbiPAvmKFIRJILQ1aT0mJ553/p6P0nEZVLePB0fk6a4GbI3EizttlWx5xXvE5ZA+Mwuo/GltDreI2kG+jNffLno9Cy0gcnbf3S96PSl8hCkIWnymoRO/d1X/iDvNJaCGQ6xxenKIgZLxk59P/L/nRn3Hi/6ThfwzEQjdca10zsJbZS3VMWFvjpDoE/1uCJLmgpzo8esH94zs7tv5mFBpECe6yhSiTbV++NTMhZtB0/YMPnRMsehmRUexFQuycO1OT0DvUg+DWLO2cypwkQb1D0zWUY+L3tLxlMNVdIGJhJBTQ7HAhnbkMZtYCLrvt/6H/+26PTltoFJkvV95WhnkfjnzjYwMdHTprU9y1adDsMsh3X6mvWup+VhtB5Kp74f6WCvJNw/MOf2IvcOr28b4ykw7vIDq03umKhrGxGXf3taZyUyn0jauoumY3BzRoAYWY1kz3zfM9cemM8uR3RmmHMkxuZa4BELepRyjMd+00W70dcilk24cUd4dIu6sbF41yO923CNZVhYNyPupOWIYIeuo24kratzWrE3ZnW4Ipb6QpaN+a2+h56j2Pcet4GJCHfKCGoLWd/zbmAi4v3m5/6Bi2wrbAMTEe1/crSrfv/bC7nPXTbq3RmH3TnuR+q/1Pkwatt+kjDG1J1wR8Dw2j01ffLwRuSd2deHscd7ZjLnIKadvKW/ezc8VPKmKEltSc/crz3L0IoxRq5a+bMa8RSsqQpQFQG3g85fy2AFDq2jE/Nbwyn3Sf2dFA59XDJCOogRpsBcs6FOx0FPE5B/6jmm53nJVMQgct9+9J5SafVxwXw+TBBS6bHOG5IxmvcHU1xw4Tn9Kfea9l7CZ1o3+Rs+zyjSkQis60fz5PMczNzARMa7M4Q/zVscYwXS3sBExrz/Qlvd3//XK9OiphXpIchlAxOZtPaZL//Goq7zuM6pF1jlP80cnCDm2t0MZSiIMQhmDX91rHPTdoKCmHq4ruYcmzYW9fKMui3nXChrf++s3KMAoCgLfD/OevnFRx+cuNG/+q3X1Ze+9h2XSTqxiYTZwORUz0HGv2US291vfMXFkrET4nB256VL9gcfP/j03Jtw/NqP/5L65puvTsR7gZCpUZZfXXluWFB5aasMwwVJLl4rGuRFYxGLYN0OO7FJHWVzf7n2vNX5THWtub5jrg/vOzLXntpe2LpXy+qkTVzhYYd92tJW6xnfMwaMS99eFZS4PNaK475k3Xcw5Xy7DMZGnYvZuKVwbw0CDlCcgH9PuYs2lYYLdsOjBVxciD4FGOprAV+PCPi7nr3WH/IkBjpAZfcDB/BdvNueiXeqDUxKJrcNTApigHgDAg5Qf7wTn5jPfNusYeh5Hh5QrMEnzpAFAIXgm3V7YgF30gYmZXoI8trApKj0aeu7n/SlNf4ryHMMqjIRCrDAAcBf6zZuTatv1u0w5jOf0ridINwtM1lRJgOumI6bzCu45TKoEyDgAJADSRuYlEhcEKOLnmVbbhuYFMBIW99Jy6z2TUdDrPMD8xyS35N4/wWFKwZAwAEKwivLMWFpjG/CktsGJjkjbvD1hI7aqslHCfrRNtb3OWOB3zRehR2qAyDgANXBF/EZxu04l7SBSZnkuYFJzmxMCZ0qaQys4YnAWOFj4z2QeQcd45EBQMABKoAP4jNSyeEgfZ997ouHYH3axDWTj4H1/546Ds0pAj6wvutQJQABB6gGZYuPCOLylFnQXc/yK7cNTHJinEK8w3Tb4rxt8j4wwxaT76qwKQZUE5aRAeSIB5OWtuPc5h56CKLeAl86GCMj3mnibU928ops4Svj5eEM9CvKo61HAQscAKZTlrtUrMULKcTbRwt86EEHIzDCfSntdqHGypbZ6Tvm+nBDnjXzmXgSNqgSgAUOUA1cio8IiEyUGqTdNc5sYOKV9X1256VxSZ2gcKz6QIv2YJ4f0Pm+oa3tO8ba7ln7VUunZGPahhwACDiAX8g46LWib7LAuKrv1neYh9tFdxzyimsuXg8t3LtWx2OMcIML2I0MoEFoCzx2i9MSWY5ZQgYAKWAMHKBZ+ORCDxBvAAQcAGZb323l1wYm27wVAAQcAGbT9cz67vNKABBwAJiNTxuYrPE6ABBwAKiWBb6hrW9maQMsCLPQARqA2cDkex4kpa/Fe503AoAFDgDp8GH2+S7iDZAfBHIBaAbdEu892RxEi/eA1wCABQ4A2ShrA5O+Pi4g3gBY4ADgvwUeqOMY49e0cAdkPQACDgBzYAK4DAu8hcwov2OEe8QMcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKgj/1+AAQAGUIw2uL0jFAAAAABJRU5ErkJggg==" alt="BTEC Logo" class="btec-logo" />
+         <span class="text-green-400">BTEC @ 2026</span>
+      </div>
+    </aside>
+
+    <main class="flex flex-col gap-4 min-h-0 h-full">
+      <section class="panel rounded-2xl p-5 flex-1 min-h-0 overflow-auto scroll-thin" id="contentHost">
+        <div class="flex justify-end mb-4 gap-2 flex-wrap">
+          <button
+            id="btnPresentationMode"
+            class="presentation-toggle mode-icon-btn"
+            title="Toggle Presentation Mode (P)"
+            aria-label="Toggle Presentation Mode"
+          >
+            <span aria-hidden="true">🖥️</span>
+          </button>
+          <!-- <button
+            id="btnUltraPresentationMode"
+            class="ultra-toggle mode-icon-btn"
+            title="Toggle Ultra Presentation Mode (U)"
+            aria-label="Toggle Ultra Presentation Mode"
+          >
+            <span aria-hidden="true">🚀</span>
+          </button> -->
+        </div>
+
+        <div class="page active" id="page-dashboard">
+          <h2 class="glitch-title text-2xl lg:text-3xl font-bold text-green-400" data-text="Secure Coding Lab Dashboard">Secure Coding Lab Dashboard</h2>
+          <p class="text-slate-300 mt-2">Write Code. Break Code. Fix Code.</p>
+
+          <div class="cyber-visual rounded-xl p-4 mt-5">
+            <div class="text-xs text-green-300 mb-3 tracking-widest">CYBER ATTACK SURFACE VISUALIZER</div>
+            <svg viewBox="0 0 720 220" class="w-full h-[146px]">
+              <g class="cyber-svg-rotate" transform="translate(110,110)">
+                <circle cx="0" cy="0" r="62" fill="none" stroke="rgba(34,197,94,0.45)" stroke-width="1.5" stroke-dasharray="5 8" />
+                <circle cx="0" cy="0" r="40" fill="none" stroke="rgba(34,197,94,0.8)" stroke-width="1.5" stroke-dasharray="3 7" />
+              </g>
+              <g class="cyber-svg-rotate-rev" transform="translate(610,110)">
+                <circle cx="0" cy="0" r="54" fill="none" stroke="rgba(59,130,246,0.6)" stroke-width="1.5" stroke-dasharray="4 8" />
+                <circle cx="0" cy="0" r="32" fill="none" stroke="rgba(34,197,94,0.6)" stroke-width="1.5" stroke-dasharray="4 6" />
+              </g>
+              <rect x="265" y="60" width="190" height="100" rx="18" fill="rgba(30,41,59,0.75)" stroke="rgba(34,197,94,0.55)" />
+              <path d="M360 82 L392 96 V122 C392 140 378 154 360 160 C342 154 328 140 328 122 V96 Z" fill="rgba(34,197,94,0.18)" stroke="rgba(34,197,94,0.85)" stroke-width="2" />
+              <path d="M349 119 L358 128 L374 112" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              <line x1="172" y1="110" x2="265" y2="110" stroke="rgba(34,197,94,0.6)" stroke-width="2" stroke-dasharray="5 7" />
+              <line x1="455" y1="110" x2="548" y2="110" stroke="rgba(34,197,94,0.6)" stroke-width="2" stroke-dasharray="5 7" />
+              <circle class="cyber-dot" cx="205" cy="110" r="4" fill="#22c55e" />
+              <circle class="cyber-dot" cx="515" cy="110" r="4" fill="#22c55e" style="animation-delay:0.4s" />
+              <text x="360" y="182" text-anchor="middle" fill="#86efac" font-size="11" letter-spacing="2">LIVE DEFENSE MONITORING</text>
+            </svg>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-6">
+            <button class="card-link panel rounded-xl p-4 text-left transition" data-goto="password">
+              <h3 class="text-green-300 font-semibold">Password Security</h3>
+              <p class="text-xs text-slate-400 mt-2">Compare insecure plaintext storage vs hashed passwords.</p>
+            </button>
+            <button class="card-link panel rounded-xl p-4 text-left transition" data-goto="sql">
+              <h3 class="text-green-300 font-semibold">SQL Injection</h3>
+              <p class="text-xs text-slate-400 mt-2">Run payloads and observe auth bypass behavior.</p>
+            </button>
+            <button class="card-link panel rounded-xl p-4 text-left transition" data-goto="xss">
+              <h3 class="text-green-300 font-semibold">XSS Attack</h3>
+              <p class="text-xs text-slate-400 mt-2">Render untrusted input with and without encoding.</p>
+            </button>
+            <button class="card-link panel rounded-xl p-4 text-left transition" data-goto="mfa">
+              <h3 class="text-green-300 font-semibold">MFA Demo</h3>
+              <p class="text-xs text-slate-400 mt-2">Demonstrate second factor protection with OTP.</p>
+            </button>
+            <button class="card-link panel rounded-xl p-4 text-left transition" data-goto="validation">
+              <h3 class="text-green-300 font-semibold">Input Validation</h3>
+              <p class="text-xs text-slate-400 mt-2">Server-style checks for malformed and weak inputs.</p>
+            </button>
+            <button class="card-link panel rounded-xl p-4 text-left transition" data-goto="logs">
+              <h3 class="text-green-300 font-semibold">Security Logs</h3>
+              <p class="text-xs text-slate-400 mt-2">Monitor security events generated by all demos.</p>
+            </button>
+          </div>
+        </div>
+
+        <div class="page" id="page-password">
+          <h2 class="text-xl font-bold text-green-400">Password Security Demo</h2>
+          <p class="text-slate-300 text-sm mt-1">Simulate insecure registration vs secure hashing.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+            <input id="pwdEmail" type="email" placeholder="Email" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+            <input id="pwdPassword" type="text" placeholder="Password" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+            <div class="flex gap-2">
+              <button id="btnRegisterInsecure" class="flex-1 bg-red-600 hover:bg-red-500 px-3 py-2 rounded-lg">Register Insecure</button>
+              <button id="btnRegisterSecure" class="flex-1 bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg">Register Secure</button>
+            </div>
+          </div>
+
+          <div class="mt-4 overflow-auto scroll-thin">
+            <table class="w-full text-sm border border-slate-700 rounded-lg overflow-hidden">
+              <thead class="bg-slate-800 text-slate-200">
+                <tr>
+                  <th class="text-left p-2">Email</th>
+                  <th class="text-left p-2">Plain Password</th>
+                  <th class="text-left p-2">Password Hash</th>
+                  <th class="text-left p-2">Mode</th>
+                </tr>
+              </thead>
+              <tbody id="passwordTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="page" id="page-validation">
+          <h2 class="text-xl font-bold text-green-400">Input Validation Demo</h2>
+          <p class="text-slate-300 text-sm mt-1">Server-side style validation simulation.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mt-4">
+            <input id="valEmail" type="text" placeholder="Email" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+            <input id="valPassword" type="text" placeholder="Password" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+            <button id="btnGeneratePassword" class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg">Generate Strong Password</button>
+            <button id="btnValidateSubmit" class="bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg">Submit</button>
+          </div>
+
+          <p class="text-xs text-slate-400 mt-2">Password policy: at least 8 characters, includes uppercase, lowercase, number, and special character.</p>
+
+          <div id="validationResult" class="mt-4 panel rounded-xl p-3 text-sm"></div>
+        </div>
+
+        <div class="page" id="page-sql">
+          <h2 class="text-xl font-bold text-green-400">SQL Injection Demo</h2>
+          <p class="text-slate-300 text-sm mt-1">Vulnerable authentication vs parameterized query defense.</p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+            <div class="panel rounded-xl p-4">
+              <div class="grid gap-3">
+                <input id="sqlEmail" type="text" placeholder="Email" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+                <input id="sqlPassword" type="text" placeholder="Password" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+                <div class="flex flex-wrap gap-2">
+                  <button id="btnPayload1" class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg">Use Payload: ' OR 1=1 --</button>
+                  <button id="btnPayload2" class="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg">Use Payload: admin@lab.local' --</button>
+                </div>
+                <label class="inline-flex items-center gap-2 text-sm mt-2">
+                  <input id="secureQueryToggle" type="checkbox" class="accent-green-500" />
+                  Enable Secure Query Mode
+                </label>
+                <button id="btnSqlLogin" class="bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg">Login</button>
+                <div id="sqlResult" class="text-sm font-semibold mt-2"></div>
+              </div>
+            </div>
+            <div class="panel rounded-xl p-4">
+              <h3 class="text-sm text-slate-300 mb-2">Simulated Query</h3>
+              <pre id="sqlQueryView" class="bg-black/50 rounded-lg p-3 text-xs text-green-300 overflow-auto">-- Waiting for login attempt...</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="page" id="page-xss">
+          <h2 class="text-xl font-bold text-green-400">XSS Attack Demo</h2>
+          <p class="text-slate-300 text-sm mt-1">Unsafe render with innerHTML vs safe encoded output.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mt-4">
+            <input id="xssNameInput" type="text" placeholder="Enter your name" class="md:col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+            <label class="inline-flex items-center gap-2 text-sm bg-slate-900 border border-slate-700 rounded-lg px-3 py-2">
+              <input id="xssEncodeToggle" type="checkbox" class="accent-green-500" />
+              Enable HTML Encoding
+            </label>
+            <button id="btnRenderXss" class="bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg">Render Output</button>
+          </div>
+
+          <div class="flex flex-wrap gap-2 mt-3 text-xs">
+            <button class="xss-payload bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded" data-payload="<script>alert('XSS Attack! your site has been HACKED!')</script>">Payload: script alert</button>
+            <button class="xss-payload bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded" data-payload="<img src='%68%61%63%6b%65%64%2e%70%6e%67?h=3aabb41741eca7c3e7da4ea8ae749064012f83c969a9e0257f4722d42c24de67' onerror=alert('XSS')>">Payload: img HACKED!!!</button>
+          </div>
+
+          <div class="mt-4 panel rounded-xl p-4">
+            <h3 class="text-sm text-slate-300 mb-2">Result Panel</h3>
+            <div id="xssOutput" class="min-h-[48px] bg-black/40 rounded-lg p-3"></div>
+          </div>
+        </div>
+
+        <div class="page" id="page-mfa">
+          <h2 class="text-xl font-bold text-green-400">MFA Demo</h2>
+          <p class="text-slate-300 text-sm mt-1">Step 1: Credentials. Step 2: One-time password verification.</p>
+
+          <div class="grid lg:grid-cols-2 gap-4 mt-4">
+            <div class="panel rounded-xl p-4">
+              <h3 class="text-sm text-slate-300 mb-2">Step 1: Login</h3>
+              <div class="grid gap-3">
+                <input id="mfaEmail" type="text" placeholder="Email (demo: user@lab.local)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+                <input id="mfaPassword" type="text" placeholder="Password (demo: Pa$$w0rd!)" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+                <button id="btnMfaLogin" class="bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg">Login</button>
+                <div id="mfaStep1Result" class="text-sm"></div>
+              </div>
+            </div>
+
+            <div class="panel rounded-xl p-4" id="mfaStep2Panel">
+              <h3 class="text-sm text-slate-300 mb-2">Step 2: Verify OTP</h3>
+              <p class="text-xs text-slate-400">Generated OTP for demo: <span id="mfaGeneratedCode" class="text-green-400 font-bold">------</span></p>
+              <div class="grid gap-3 mt-3">
+                <input id="mfaOtpInput" type="text" placeholder="Enter OTP" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2" />
+                <button id="btnMfaVerify" class="bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg">Verify OTP</button>
+                <div id="mfaStep2Result" class="text-sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page" id="page-logs">
+          <h2 class="text-xl font-bold text-green-400">Security Logs</h2>
+          <p class="text-slate-300 text-sm mt-1">Real-time monitoring panel for all simulated security events.</p>
+
+          <div class="mt-4 border border-slate-700 rounded-xl overflow-hidden">
+            <div class="max-h-[360px] overflow-auto scroll-thin">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-800 sticky top-0">
+                  <tr>
+                    <th class="text-left p-2">Time</th>
+                    <th class="text-left p-2">Event</th>
+                    <th class="text-left p-2">IP</th>
+                  </tr>
+                </thead>
+                <tbody id="logsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel terminal-shell rounded-2xl p-4 min-h-[170px] shrink-0">
+        <h3 class="text-sm text-green-400 font-semibold inline-flex items-center gap-2">Terminal Output <span class="terminal-dot"></span></h3>
+        <div id="terminalOutput" class="mt-2 bg-black/50 border border-slate-800 rounded-lg p-3 h-[120px] overflow-auto text-sm text-green-300 scroll-thin"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="theoryModal" class="theory-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="theoryTitle">
+    <div class="panel theory-modal p-5">
+      <div class="flex items-start justify-between gap-4">
+        <h3 id="theoryTitle" class="text-xl font-bold text-green-300">Security Theory</h3>
+        <button id="btnCloseTheoryModal" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-sm">Close</button>
+      </div>
+
+      <div class="mt-4 grid gap-4 text-sm text-slate-200">
+        <div class="panel rounded-lg p-3">
+          <div class="text-green-300 font-semibold">Definition</div>
+          <ul id="theoryDefinition" class="mt-2 text-slate-300 list-disc ml-5 space-y-1"></ul>
+        </div>
+        <div class="panel rounded-lg p-3">
+          <div class="text-amber-300 font-semibold">Why Is This Dangerous?</div>
+          <ul id="theoryDanger" class="mt-2 text-slate-300 list-disc ml-5 space-y-1"></ul>
+        </div>
+        <div class="panel rounded-lg p-3">
+          <div class="text-red-300 font-semibold">Real-world impact</div>
+          <ul id="theoryImpact" class="mt-2 text-slate-300 list-disc ml-5 space-y-1"></ul>
+        </div>
+        <div id="theoryCodeWrap" class="panel rounded-lg p-3 hidden">
+          <div class="text-sky-300 font-semibold">Code example</div>
+          <pre id="theoryCode" class="mt-2 bg-black/50 border border-slate-700 rounded-lg p-3 text-xs text-green-300 overflow-auto"></pre>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-wrap gap-2 justify-end">
+        <button id="btnTheoryGoDemo" class="bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg text-sm">Open Demo</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quizModal" class="quiz-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+    <div class="panel quiz-modal p-5">
+      <div class="quiz-fireworks" id="quizFireworks"></div>
+      <div class="flex items-start justify-between gap-4">
+        <h3 id="quizTitle" class="text-2xl font-bold text-green-300">Quiz!</h3>
+        <button id="btnCloseQuizModal" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-sm">Close</button>
+      </div>
+
+      <p id="quizProgress" class="text-sm text-slate-400 mt-2"></p>
+      <div class="panel rounded-lg p-4 mt-3">
+        <div id="quizQuestionText" class="text-lg text-slate-100 font-semibold"></div>
+        <div id="quizOptions" class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4"></div>
+        <div id="quizStatus" class="quiz-status mt-4 text-sm"></div>
+      </div>
+
+      <div class="mt-4 flex flex-wrap gap-2 justify-end">
+        <button id="btnViewAnswer" class="bg-sky-700 hover:bg-sky-600 px-3 py-2 rounded-lg text-sm">View Answer</button>
+        <button id="btnNextQuestion" class="bg-green-600 hover:bg-green-500 px-3 py-2 rounded-lg text-sm">Next Question</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="quizAnswerModal" class="quiz-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="quizAnswerTitle">
+    <div class="panel quiz-modal p-5">
+      <div class="flex items-start justify-between gap-4">
+        <h3 id="quizAnswerTitle" class="text-xl font-bold text-green-300">Correct Answer</h3>
+        <button id="btnCloseAnswerModal" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-sm">Close</button>
+      </div>
+
+      <div class="panel rounded-lg p-4 mt-4">
+        <p id="quizAnswerText" class="text-slate-200"></p>
+        <p id="quizAnswerExplain" class="text-slate-300 mt-3 text-sm"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      passwordRows: [],
+      logs: [],
+      terminalBusy: false,
+      mfa: {
+        otp: null,
+        step1Passed: false
+      }
+    };
+
+    const navButtons = document.querySelectorAll('#navMenu .nav-item');
+    const pages = document.querySelectorAll('.page');
+    const terminalOutput = document.getElementById('terminalOutput');
+    const logsTableBody = document.getElementById('logsTableBody');
+    const passwordTableBody = document.getElementById('passwordTableBody');
+    const btnPresentationMode = document.getElementById('btnPresentationMode');
+    const btnUltraPresentationMode = document.getElementById('btnUltraPresentationMode');
+    const theoryModal = document.getElementById('theoryModal');
+    const btnCloseTheoryModal = document.getElementById('btnCloseTheoryModal');
+    const btnTheoryGoDemo = document.getElementById('btnTheoryGoDemo');
+    const theoryTitle = document.getElementById('theoryTitle');
+    const theoryDefinition = document.getElementById('theoryDefinition');
+    const theoryDanger = document.getElementById('theoryDanger');
+    const theoryImpact = document.getElementById('theoryImpact');
+    const theoryCodeWrap = document.getElementById('theoryCodeWrap');
+    const theoryCode = document.getElementById('theoryCode');
+    const quizModal = document.getElementById('quizModal');
+    const btnCloseQuizModal = document.getElementById('btnCloseQuizModal');
+    const quizProgress = document.getElementById('quizProgress');
+    const quizQuestionText = document.getElementById('quizQuestionText');
+    const quizOptions = document.getElementById('quizOptions');
+    const quizStatus = document.getElementById('quizStatus');
+    const btnNextQuestion = document.getElementById('btnNextQuestion');
+    const btnViewAnswer = document.getElementById('btnViewAnswer');
+    const quizFireworks = document.getElementById('quizFireworks');
+    const quizAnswerModal = document.getElementById('quizAnswerModal');
+    const btnCloseAnswerModal = document.getElementById('btnCloseAnswerModal');
+    const quizAnswerText = document.getElementById('quizAnswerText');
+    const quizAnswerExplain = document.getElementById('quizAnswerExplain');
+    let viewMode = 'normal';
+    let pendingTheoryTarget = null;
+    let currentQuizIndex = 0;
+    let quizStatusFadeTimer = null;
+    let quizStatusClearTimer = null;
+
+    const quizQuestions = [
+      {
+        question: '[Easy] What should you do before trusting user input?',
+        options: {
+          A: 'Store it immediately without checks',
+          B: 'Validate and sanitize it',
+          C: 'Only trust input from mobile users',
+          D: 'Encode it to Base64 only'
+        },
+        correct: 'B',
+        explain: 'Validation and sanitization help block malformed and malicious data early.'
+      },
+      {
+        question: '[Easy] What is the safest way to display untrusted text on a web page?',
+        options: {
+          A: 'Use innerHTML directly',
+          B: 'Use textContent or proper encoding',
+          C: 'Put it inside a hidden field',
+          D: 'Wrap it in script tags'
+        },
+        correct: 'B',
+        explain: 'Rendering as plain text prevents browser from executing attacker HTML/JavaScript.'
+      },
+      {
+        question: 'What is the safest way to store user passwords?',
+        options: {
+          A: 'Save plain text password in database',
+          B: 'Encrypt with a fixed key and share key with team',
+          C: 'Hash password with salt',
+          D: 'Store password in browser localStorage'
+        },
+        correct: 'C',
+        explain: 'Hash + salt protects passwords even if database data is leaked.'
+      },
+      {
+        question: 'Which is the main defense against SQL Injection?',
+        options: {
+          A: 'Client-side validation only',
+          B: 'Parameterized queries',
+          C: 'Hide SQL errors from users only',
+          D: 'Use longer table names'
+        },
+        correct: 'B',
+        explain: 'Parameterized queries separate code from data, so payloads are treated as text.'
+      },
+      {
+        question: '[Medium] Which input should be validated on the server?',
+        options: {
+          A: 'Only password fields',
+          B: 'Only query string values',
+          C: 'Only JSON body fields',
+          D: 'All external input sources'
+        },
+        correct: 'D',
+        explain: 'Anything from clients, headers, params, body, or files must be treated as untrusted.'
+      },
+      {
+        question: 'Why is XSS dangerous?',
+        options: {
+          A: 'It makes the page load faster',
+          B: 'It can execute attacker script in victim browser',
+          C: 'It only affects server CPU',
+          D: 'It automatically encrypts cookies'
+        },
+        correct: 'B',
+        explain: 'XSS lets attackers run script to steal sessions or manipulate page content.'
+      },
+      {
+        question: 'What is the biggest weakness of client-side validation only?',
+        options: {
+          A: 'It is too fast',
+          B: 'It always blocks SQL Injection',
+          C: 'Attackers can bypass it and call API directly',
+          D: 'It requires HTTPS'
+        },
+        correct: 'C',
+        explain: 'Security checks must run on server because attackers can skip frontend.'
+      },
+      {
+        question: '[Hard] A hashed password database leaked. What most reduces attacker success next?',
+        options: {
+          A: 'Force users to clear browser cache',
+          B: 'Rotate UI color theme',
+          C: 'Unique salts + strong adaptive hashing + reset exposed passwords',
+          D: 'Hide login page for one day'
+        },
+        correct: 'C',
+        explain: 'Strong adaptive hash with per-user salt slows cracking; password reset limits reuse risk.'
+      },
+      {
+        question: '[Hard] Which defense-in-depth set is best for web app input handling?',
+        options: {
+          A: 'Client validation only',
+          B: 'WAF only',
+          C: 'Server validation + parameterized queries + output encoding + least privilege',
+          D: 'Disable logs to reduce noise'
+        },
+        correct: 'C',
+        explain: 'Layered controls reduce risk across input, database, rendering, and system access.'
+      },
+      {
+        question: 'How does MFA improve login security?',
+        options: {
+          A: 'It removes the need for password',
+          B: 'It adds a second factor like OTP code',
+          C: 'It stores more data in browser',
+          D: 'It disables logs'
+        },
+        correct: 'B',
+        explain: 'Even if password leaks, attacker still needs the second factor.'
+      }
+    ];
+
+    const securityTheoryByTopic = {
+      password: {
+        title: 'Password Security',
+        definitionPoints: [
+          'Plain-text means the password is saved exactly as the user typed it.',
+          'There is no protection like hashing or salting.',
+          'If someone opens the database, they can read every password.'
+        ],
+        dangerPoints: [
+          'One database leak can expose all accounts at once.',
+          'Staff with database access can also see user passwords.',
+          'Many users reuse passwords, so one leak can affect other websites too.'
+        ],
+        impactPoints: [
+          'Attackers can quickly log in to many user accounts.',
+          'The team must force password resets and handle support issues.',
+          'Users lose trust because basic security was not followed.'
+        ],
+        code: `// Vulnerable: plain-text password storage\nvar user = new User { Email = email, Password = password };\n\n// Secure: hash before storing\nuser.PasswordHash = HashPassword(password);`
+      },
+      validation: {
+        title: 'Input Validation',
+        definitionPoints: [
+          'Input validation checks if user data is in the correct format.',
+          'Examples: valid email, minimum password length, required fields.',
+          'These checks must run on the server, not only in the browser.'
+        ],
+        dangerPoints: [
+          'Hackers can skip frontend checks and call the API directly.',
+          'Bad input can break logic and cause app errors.',
+          'Weak validation makes other attacks easier.'
+        ],
+        impactPoints: [
+          'Wrong data is saved in the database and causes confusion later.',
+          'Developers spend time cleaning data and fixing avoidable bugs.',
+          'System quality drops and user experience becomes worse.'
+        ],
+        code: `if (!emailRegex.test(email)) {\n  return badRequest('Invalid email format');\n}\nif (password.length < 8) {\n  return badRequest('Password too short');\n}`
+      },
+      sql: {
+        title: 'SQL Injection',
+        definitionPoints: [
+          'SQL Injection is when user input changes your SQL query.',
+          'It usually happens when code builds SQL using string concatenation.',
+          'The database cannot tell code and user data apart.'
+        ],
+        dangerPoints: [
+          'Attackers may bypass login without a real password.',
+          'They can read private data from tables they should never access.',
+          'In bad cases, they can modify or delete important data.'
+        ],
+        impactPoints: [
+          'Sensitive information can be leaked to the public.',
+          'Business data can be corrupted, causing wrong reports and decisions.',
+          'Recovery takes time and can interrupt normal operations.'
+        ],
+        code: `// Vulnerable\nconst q = "SELECT * FROM users WHERE email='" + email + "' AND password='" + password + "'";\n\n// Safe (parameterized)\nconst qSafe = 'SELECT * FROM users WHERE email = ? AND password = ?';`
+      },
+      xss: {
+        title: 'XSS Attack',
+        definitionPoints: [
+          'XSS happens when user input is shown as executable HTML/JavaScript.',
+          'This often occurs when using unsafe rendering like innerHTML.',
+          'The victim browser runs attacker code as if it belongs to your site.'
+        ],
+        dangerPoints: [
+          'Attackers can steal session data and act like the logged-in user.',
+          'They can show fake forms to trick users into entering secrets.',
+          'A stored payload can affect many users, not just one.'
+        ],
+        impactPoints: [
+          'User accounts can be hijacked even if backend passwords are safe.',
+          'Users see strange popups or modified pages and lose trust.',
+          'Security incidents become public and hurt product reputation.'
+        ],
+        code: `// Vulnerable\noutput.innerHTML = 'Hello, ' + userInput;\n\n// Safer\noutput.textContent = 'Hello, ' + userInput;`
+      },
+      mfa: {
+        title: 'MFA Protection',
+        definitionPoints: [
+          'MFA means login needs more than just a password.',
+          'A common setup is password + one-time code from phone app.',
+          'Even if password leaks, attackers still need the second factor.'
+        ],
+        dangerPoints: [
+          'Password-only login is weak when users reuse passwords.',
+          'Attackers can test leaked passwords automatically at high speed.',
+          'Without MFA, many accounts can be compromised quickly.'
+        ],
+        impactPoints: [
+          'MFA blocks most automated account takeover attempts.',
+          'Fewer incidents means less support and recovery workload.',
+          'Overall account security improves significantly.'
+        ]
+      },
+      logs: {
+        title: 'Security Logging & Auditing',
+        definitionPoints: [
+          'Security logging records important events such as login failures and attacks.',
+          'Logs should be structured so teams can search and analyze quickly.',
+          'Audit logs help explain what happened and when it happened.'
+        ],
+        dangerPoints: [
+          'Without logs, attacks may continue without anyone noticing.',
+          'After an incident, teams cannot investigate clearly.',
+          'You also lack evidence to prove security controls are working.'
+        ],
+        impactPoints: [
+          'Late detection usually means bigger damage and higher cost.',
+          'Incident response becomes slower and less accurate.',
+          'Company reputation and compliance readiness both suffer.'
+        ],
+        code: `logSecurityEvent({\n  eventType: 'LoginFailure',\n  ip: clientIp,\n  userAgent,\n  timestamp: new Date().toISOString()\n});`
+      }
+    };
+
+    function renderBulletList(targetElement, items) {
+      targetElement.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        targetElement.appendChild(li);
+      });
+    }
+
+    function openTheoryModal(topic) {
+      const theory = securityTheoryByTopic[topic];
+      if (!theory) {
+        switchPage(topic);
+        return;
+      }
+
+      pendingTheoryTarget = topic;
+      theoryTitle.textContent = `${theory.title} - Security Brief`;
+      renderBulletList(theoryDefinition, theory.definitionPoints || []);
+      renderBulletList(theoryDanger, theory.dangerPoints || []);
+      renderBulletList(theoryImpact, theory.impactPoints || []);
+      if (theory.code) {
+        theoryCode.textContent = theory.code;
+        theoryCodeWrap.classList.remove('hidden');
+      } else {
+        theoryCode.textContent = '';
+        theoryCodeWrap.classList.add('hidden');
+      }
+      theoryModal.classList.add('show');
+      btnCloseTheoryModal.focus();
+    }
+
+    function closeTheoryModal() {
+      theoryModal.classList.remove('show');
+    }
+
+    function renderQuizQuestion() {
+      const item = quizQuestions[currentQuizIndex];
+      clearTimeout(quizStatusFadeTimer);
+      clearTimeout(quizStatusClearTimer);
+      quizProgress.textContent = `Question ${currentQuizIndex + 1}/${quizQuestions.length}`;
+      quizQuestionText.textContent = item.question;
+      quizOptions.innerHTML = '';
+      quizStatus.textContent = '';
+      quizStatus.className = 'quiz-status mt-4 text-sm';
+      quizStatus.classList.remove('fade-out');
+
+      Object.entries(item.options).forEach(([key, value]) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.innerHTML = `<strong>${key}.</strong> ${value}`;
+        btn.addEventListener('click', () => handleQuizAnswer(key));
+        quizOptions.appendChild(btn);
+      });
+    }
+
+    function launchFireworks() {
+      quizFireworks.innerHTML = `
+        <span class="confetti-cannon left">🎉🔫</span>
+        <span class="confetti-cannon right">🎉🔫</span>
+      `;
+      const emojis = ['🎉', '✨', '🎊', '💥', '⭐'];
+      const origins = [
+        { left: 12, top: 76, direction: 1 },
+        { left: 88, top: 76, direction: -1 }
+      ];
+
+      for (let index = 0; index < 34; index += 1) {
+        const origin = origins[index % 2];
+        const piece = document.createElement('span');
+        piece.className = 'confetti';
+        piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        piece.style.left = `${origin.left + (Math.random() * 6 - 3)}%`;
+        piece.style.top = `${origin.top + Math.random() * 8}%`;
+        piece.style.setProperty('--x-mid', `${origin.direction * (55 + Math.random() * 95)}px`);
+        piece.style.setProperty('--y-mid', `${-(130 + Math.random() * 110)}px`);
+        piece.style.setProperty('--x-end', `${origin.direction * (95 + Math.random() * 220)}px`);
+        piece.style.setProperty('--y-end', `${140 + Math.random() * 210}px`);
+        piece.style.setProperty('--rot-end', `${Math.round((Math.random() * 2 - 1) * 780)}deg`);
+        piece.style.animationDelay = `${Math.random() * 0.65}s`;
+        quizFireworks.appendChild(piece);
+      }
+      setTimeout(() => {
+        quizFireworks.innerHTML = '';
+      }, 3200);
+    }
+
+    function handleQuizAnswer(choice) {
+      const item = quizQuestions[currentQuizIndex];
+      clearTimeout(quizStatusFadeTimer);
+      clearTimeout(quizStatusClearTimer);
+      quizStatus.classList.remove('fade-out');
+
+      if (choice === item.correct) {
+        quizStatus.className = 'quiz-status mt-4 text-sm text-green-300';
+        quizStatus.textContent = '🎆 Congratulation!';
+        launchFireworks();
+      } else {
+        quizStatus.className = 'quiz-status mt-4 text-sm text-red-300';
+        quizStatus.textContent = '😢 Oops! Better luck next time!';
+        quizStatusFadeTimer = setTimeout(() => {
+          quizStatus.classList.add('fade-out');
+        }, 1500);
+        quizStatusClearTimer = setTimeout(() => {
+          quizStatus.textContent = '';
+          quizStatus.className = 'quiz-status mt-4 text-sm';
+          quizStatus.classList.remove('fade-out');
+        }, 2400);
+      }
+    }
+
+    function openQuizModal() {
+      quizModal.classList.add('show');
+      renderQuizQuestion();
+      btnCloseQuizModal.focus();
+    }
+
+    function closeQuizModal() {
+      quizModal.classList.remove('show');
+      quizFireworks.innerHTML = '';
+    }
+
+    function openAnswerModal() {
+      const item = quizQuestions[currentQuizIndex];
+      quizAnswerText.textContent = `Correct answer: ${item.correct}. ${item.options[item.correct]}`;
+      quizAnswerExplain.textContent = item.explain;
+      quizAnswerModal.classList.add('show');
+      btnCloseAnswerModal.focus();
+    }
+
+    function closeAnswerModal() {
+      quizAnswerModal.classList.remove('show');
+    }
+
+    function switchPage(page) {
+      if (page === 'quiz') {
+        openQuizModal();
+        return;
+      }
+      navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.page === page));
+      pages.forEach(p => p.classList.toggle('active', p.id === `page-${page}`));
+    }
+
+    navButtons.forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.page)));
+    document.querySelectorAll('[data-goto]').forEach(card => {
+      card.addEventListener('click', () => openTheoryModal(card.dataset.goto));
+    });
+
+    btnCloseTheoryModal.addEventListener('click', closeTheoryModal);
+    btnTheoryGoDemo.addEventListener('click', () => {
+      if (pendingTheoryTarget) {
+        switchPage(pendingTheoryTarget);
+      }
+      closeTheoryModal();
+    });
+    theoryModal.addEventListener('click', (event) => {
+      if (event.target === theoryModal) {
+        closeTheoryModal();
+      }
+    });
+
+    btnCloseQuizModal.addEventListener('click', closeQuizModal);
+    btnNextQuestion.addEventListener('click', () => {
+      currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
+      renderQuizQuestion();
+    });
+    btnViewAnswer.addEventListener('click', openAnswerModal);
+    btnCloseAnswerModal.addEventListener('click', closeAnswerModal);
+
+    quizModal.addEventListener('click', (event) => {
+      if (event.target === quizModal) {
+        closeQuizModal();
+      }
+    });
+
+    quizAnswerModal.addEventListener('click', (event) => {
+      if (event.target === quizAnswerModal) {
+        closeAnswerModal();
+      }
+    });
+
+    function setViewMode(mode) {
+      viewMode = mode;
+
+      document.body.classList.remove('presentation-mode', 'ultra-presentation-mode');
+      if (mode === 'presentation') {
+        document.body.classList.add('presentation-mode');
+      }
+      if (mode === 'ultra') {
+        document.body.classList.add('ultra-presentation-mode');
+      }
+
+      btnPresentationMode.title = mode === 'presentation' ? 'Disable Presentation Mode (P)' : 'Enable Presentation Mode (P)';
+      btnPresentationMode.setAttribute('aria-label', mode === 'presentation' ? 'Disable Presentation Mode' : 'Enable Presentation Mode');
+
+      if (btnUltraPresentationMode) {
+        btnUltraPresentationMode.title = mode === 'ultra' ? 'Disable Ultra Presentation Mode (U)' : 'Enable Ultra Presentation Mode (U)';
+        btnUltraPresentationMode.setAttribute('aria-label', mode === 'ultra' ? 'Disable Ultra Presentation Mode' : 'Enable Ultra Presentation Mode');
+      }
+
+      btnPresentationMode.classList.toggle('mode-btn-active', mode === 'presentation');
+      if (btnUltraPresentationMode) {
+        btnUltraPresentationMode.classList.toggle('mode-btn-active', mode === 'ultra');
+      }
+    }
+
+    btnPresentationMode.addEventListener('click', () => {
+      setViewMode(viewMode === 'presentation' ? 'normal' : 'presentation');
+    });
+
+    if (btnUltraPresentationMode) {
+      btnUltraPresentationMode.addEventListener('click', () => {
+        setViewMode(viewMode === 'ultra' ? 'normal' : 'ultra');
+      });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key.toLowerCase() === 'p' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        const activeTag = document.activeElement?.tagName?.toLowerCase();
+        if (activeTag === 'input' || activeTag === 'textarea') return;
+        setViewMode(viewMode === 'presentation' ? 'normal' : 'presentation');
+      }
+
+      if (event.key.toLowerCase() === 'u' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        const activeTag = document.activeElement?.tagName?.toLowerCase();
+        if (activeTag === 'input' || activeTag === 'textarea') return;
+        setViewMode(viewMode === 'ultra' ? 'normal' : 'ultra');
+      }
+
+      if (event.key === 'Escape' && theoryModal.classList.contains('show')) {
+        closeTheoryModal();
+      }
+
+      if (event.key === 'Escape' && quizModal.classList.contains('show')) {
+        closeQuizModal();
+      }
+
+      if (event.key === 'Escape' && quizAnswerModal.classList.contains('show')) {
+        closeAnswerModal();
+      }
+    });
+
+    function randomIp() {
+      const part = () => Math.floor(Math.random() * 255);
+      return `${part()}.${part()}.${part()}.${part()}`;
+    }
+
+    function addLog(eventName, ip = randomIp()) {
+      const entry = {
+        time: new Date().toLocaleTimeString(),
+        event: eventName,
+        ip
+      };
+      state.logs.unshift(entry);
+      renderLogs();
+    }
+
+    function renderLogs() {
+      logsTableBody.innerHTML = '';
+      state.logs.forEach(log => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-t border-slate-800';
+        tr.innerHTML = `
+          <td class="p-2 text-slate-300">${log.time}</td>
+          <td class="p-2 ${log.event.includes('FAILURE') || log.event.includes('ATTEMPT') ? 'text-red-400' : 'text-green-300'}">${log.event}</td>
+          <td class="p-2 text-slate-400">${log.ip}</td>
+        `;
+        logsTableBody.appendChild(tr);
+      });
+    }
+
+    async function typeTerminal(lines, speed = 32) {
+      while (state.terminalBusy) {
+        await new Promise(r => setTimeout(r, 20));
+      }
+      state.terminalBusy = true;
+      terminalOutput.innerHTML = '';
+
+      for (const line of lines) {
+        const el = document.createElement('div');
+        el.className = 'terminal-line';
+        terminalOutput.appendChild(el);
+
+        for (const ch of line) {
+          el.textContent += ch;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+          await new Promise(r => setTimeout(r, speed));
+        }
+      }
+
+      await new Promise(r => setTimeout(r, 3000));
+      state.terminalBusy = false;
+    }
+
+    function fakeHash(password) {
+      const base = btoa(`${password}:${Date.now()}:${Math.random().toString(36).slice(2)}`);
+      return `AQAAAAEAACcQAAAA${base}`;
+    }
+
+    function renderPasswordRows() {
+      passwordTableBody.innerHTML = '';
+      state.passwordRows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.className = `border-t border-slate-800 ${row.mode === 'INSECURE' ? 'bg-red-900/30' : 'bg-transparent'}`;
+        tr.innerHTML = `
+          <td class="p-2">${row.email}</td>
+          <td class="p-2 ${row.mode === 'INSECURE' ? 'text-red-300' : 'text-slate-300'}">${row.plain}</td>
+          <td class="p-2 text-green-300">${row.hash}</td>
+          <td class="p-2 ${row.mode === 'INSECURE' ? 'text-red-400' : 'text-green-400'}">${row.mode}</td>
+        `;
+        passwordTableBody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('btnRegisterInsecure').addEventListener('click', async () => {
+      const email = document.getElementById('pwdEmail').value.trim();
+      const password = document.getElementById('pwdPassword').value;
+      if (!email || !password) return;
+
+      state.passwordRows.unshift({ email, plain: password, hash: '(none)', mode: 'INSECURE' });
+      renderPasswordRows();
+      addLog('PASSWORD_INSECURE_REGISTRATION');
+
+      await typeTerminal([
+        '> Registering user (insecure mode)...',
+        '> Plain password persisted to database.',
+        '> Security risk: credential exposure possible.'
+      ]);
+    });
+
+    document.getElementById('btnRegisterSecure').addEventListener('click', async () => {
+      const email = document.getElementById('pwdEmail').value.trim();
+      const password = document.getElementById('pwdPassword').value;
+      if (!email || !password) return;
+
+      const hash = fakeHash(password);
+      state.passwordRows.unshift({ email, plain: '(hidden)', hash, mode: 'SECURE' });
+      renderPasswordRows();
+      addLog('PASSWORD_SECURE_REGISTRATION');
+
+      await typeTerminal([
+        '> Registering user (secure mode)...',
+        '> Hashing password with strong algorithm (simulated).',
+        '> Password hash stored successfully.'
+      ]);
+    });
+
+    document.getElementById('btnValidateSubmit').addEventListener('click', async () => {
+      const email = document.getElementById('valEmail').value.trim();
+      const password = document.getElementById('valPassword').value;
+      const result = document.getElementById('validationResult');
+      const errors = [];
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push('Invalid email format');
+      }
+      if (password.length < 8) {
+        errors.push('Password must be at least 8 characters');
+      }
+      if (!/[A-Z]/.test(password)) {
+        errors.push('Password must include at least 1 uppercase letter');
+      }
+      if (!/[a-z]/.test(password)) {
+        errors.push('Password must include at least 1 lowercase letter');
+      }
+      if (!/[0-9]/.test(password)) {
+        errors.push('Password must include at least 1 number');
+      }
+      if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
+        errors.push('Password must include at least 1 special character');
+      }
+
+      if (errors.length) {
+        result.innerHTML = `<div class="status-danger font-semibold">Validation failed:</div><ul class="list-disc ml-5 mt-1 text-red-300">${errors.map(e => `<li>${e}</li>`).join('')}</ul>`;
+        addLog('INPUT_VALIDATION_FAILURE');
+        await typeTerminal([
+          '> Validating request payload...',
+          '> Server rejected invalid input fields.',
+          '> Response: 400 Bad Request.'
+        ]);
+      } else {
+        result.innerHTML = '<div class="status-success font-semibold">Validation successful. Input accepted.</div>';
+        addLog('INPUT_VALIDATION_SUCCESS');
+        await typeTerminal([
+          '> Validating request payload...',
+          '> All checks passed.',
+          '> Request forwarded to business logic.'
+        ]);
+      }
+    });
+
+    function generateStrongPassword(length = 12) {
+      const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+      const lower = 'abcdefghijkmnopqrstuvwxyz';
+      const digits = '23456789';
+      const special = '!@#$%^&*_-+=';
+      const allChars = upper + lower + digits + special;
+
+      const required = [
+        upper[Math.floor(Math.random() * upper.length)],
+        lower[Math.floor(Math.random() * lower.length)],
+        digits[Math.floor(Math.random() * digits.length)],
+        special[Math.floor(Math.random() * special.length)]
+      ];
+
+      while (required.length < length) {
+        required.push(allChars[Math.floor(Math.random() * allChars.length)]);
+      }
+
+      for (let i = required.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [required[i], required[j]] = [required[j], required[i]];
+      }
+
+      return required.join('');
+    }
+
+    document.getElementById('btnGeneratePassword').addEventListener('click', async () => {
+      const generatedPassword = generateStrongPassword();
+      document.getElementById('valPassword').value = generatedPassword;
+      addLog('PASSWORD_GENERATED_FOR_VALIDATION_DEMO');
+
+      await typeTerminal([
+        '> Generating strong random password...',
+        `> Generated: ${generatedPassword}`,
+        '> Policy satisfied: length + upper + lower + number + special.'
+      ]);
+    });
+
+    const sqlEmail = document.getElementById('sqlEmail');
+    const sqlPassword = document.getElementById('sqlPassword');
+    const sqlResult = document.getElementById('sqlResult');
+    const sqlQueryView = document.getElementById('sqlQueryView');
+    const secureQueryToggle = document.getElementById('secureQueryToggle');
+
+    document.getElementById('btnPayload1').addEventListener('click', () => {
+      sqlEmail.value = `' OR 1=1 --`;
+      sqlPassword.value = 'anything';
+    });
+
+    document.getElementById('btnPayload2').addEventListener('click', () => {
+      sqlEmail.value = `admin@lab.local' --`;
+      sqlPassword.value = 'irrelevant';
+    });
+
+    document.getElementById('btnSqlLogin').addEventListener('click', async () => {
+      const email = sqlEmail.value;
+      const password = sqlPassword.value;
+      const secureMode = secureQueryToggle.checked;
+      const payloadDetected = /('|--|;|\bor\b\s+1=1)/i.test(email + ' ' + password);
+
+      if (!secureMode) {
+        sqlQueryView.textContent = `SELECT * FROM users WHERE email = '${email}' AND password = '${password}'`;
+
+        if (payloadDetected) {
+          sqlResult.innerHTML = '<span class="danger-flash">ACCESS GRANTED</span>';
+          addLog('SQL_INJECTION_ATTEMPT');
+          await typeTerminal([
+            '> Running query...',
+            '> Injection detected...',
+            '> Authentication bypassed.',
+            '> ACCESS GRANTED!'
+          ]);
+        } else {
+          sqlResult.innerHTML = '<span class="status-danger">ACCESS DENIED</span>';
+          addLog('LOGIN_FAILURE');
+          await typeTerminal([
+            '> Running query...',
+            '> No matching user found.',
+            '> ACCESS DENIED'
+          ]);
+        }
+      } else {
+        sqlQueryView.textContent = 'SELECT * FROM users WHERE email = ? AND password = ?   -- parameterized';
+        if (payloadDetected) {
+          sqlResult.innerHTML = '<span class="status-success">Query parameterized. Injection blocked.</span>';
+          addLog('SQL_INJECTION_BLOCKED');
+          await typeTerminal([
+            '> Running parameterized query...',
+            '> Payload treated as plain string.',
+            '> Query parameterized.',
+            '> Injection blocked.'
+          ]);
+        } else {
+          const ok = email === 'admin@lab.local' && password === 'Admin@123';
+          if (ok) {
+            sqlResult.innerHTML = '<span class="status-success">LOGIN_SUCCESS</span>';
+            addLog('LOGIN_SUCCESS');
+            await typeTerminal([
+              '> Running parameterized query...',
+              '> User authenticated.',
+              '> LOGIN SUCCESS'
+            ]);
+          } else {
+            sqlResult.innerHTML = '<span class="status-danger">ACCESS DENIED</span>';
+            addLog('LOGIN_FAILURE');
+            await typeTerminal([
+              '> Running parameterized query...',
+              '> Credentials invalid.',
+              '> ACCESS DENIED'
+            ]);
+          }
+        }
+      }
+    });
+
+    function encodeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    const xssInput = document.getElementById('xssNameInput');
+    document.querySelectorAll('.xss-payload').forEach(btn => {
+      btn.addEventListener('click', () => {
+        xssInput.value = btn.dataset.payload;
+      });
+    });
+
+    document.getElementById('btnRenderXss').addEventListener('click', async () => {
+      const val = xssInput.value;
+      const encoded = document.getElementById('xssEncodeToggle').checked;
+      const output = document.getElementById('xssOutput');
+
+      if (!encoded) {
+        output.innerHTML = `HAHAHA, ${val}`;
+        addLog('XSS_ATTEMPT');
+
+        if (/<script|onerror\s*=|onload\s*=|javascript:/i.test(val)) {
+          setTimeout(() => alert('Simulated XSS execution'), 120);
+        }
+
+        await typeTerminal([
+          '> Rendering untrusted input with innerHTML...',
+          '> Potential script execution path detected.',
+          '> XSS risk exposed.'
+        ]);
+      } else {
+        output.innerHTML = `Hello, ${encodeHtml(val)}`;
+        addLog('XSS_BLOCKED');
+        await typeTerminal([
+          '> Rendering encoded output...',
+          '> HTML entities escaped successfully.',
+          '> Script execution blocked.'
+        ]);
+      }
+    });
+
+    const demoAccount = {
+      email: 'user@lab.local',
+      password: 'Pa$$w0rd!'
+    };
+
+    const mfaStep2Panel = document.getElementById('mfaStep2Panel');
+    mfaStep2Panel.classList.add('opacity-50', 'pointer-events-none');
+
+    function generateOtp() {
+      return String(Math.floor(100000 + Math.random() * 900000));
+    }
+
+    document.getElementById('btnMfaLogin').addEventListener('click', async () => {
+      const email = document.getElementById('mfaEmail').value.trim();
+      const password = document.getElementById('mfaPassword').value;
+      const result = document.getElementById('mfaStep1Result');
+
+      if (email === demoAccount.email && password === demoAccount.password) {
+        state.mfa.step1Passed = true;
+        state.mfa.otp = generateOtp();
+        document.getElementById('mfaGeneratedCode').textContent = state.mfa.otp;
+        result.innerHTML = '<span class="status-success">Credentials accepted. Proceed to OTP verification.</span>';
+        mfaStep2Panel.classList.remove('opacity-50', 'pointer-events-none');
+        addLog('LOGIN_SUCCESS');
+        await typeTerminal([
+          '> Step 1 authentication successful.',
+          '> Generating time-based OTP (simulated).',
+          `> OTP issued: ${state.mfa.otp}`
+        ]);
+      } else {
+        state.mfa.step1Passed = false;
+        state.mfa.otp = null;
+        result.innerHTML = '<span class="status-danger">Invalid credentials.</span>';
+        addLog('LOGIN_FAILURE');
+        await typeTerminal([
+          '> Step 1 authentication failed.',
+          '> Invalid username or password.'
+        ]);
+      }
+    });
+
+    document.getElementById('btnMfaVerify').addEventListener('click', async () => {
+      const otp = document.getElementById('mfaOtpInput').value.trim();
+      const result = document.getElementById('mfaStep2Result');
+
+      if (!state.mfa.step1Passed) {
+        result.innerHTML = '<span class="status-danger">Complete Step 1 first.</span>';
+        return;
+      }
+
+      if (otp === state.mfa.otp) {
+        result.innerHTML = '<span class="status-success">MFA_SUCCESS: Login completed.</span>';
+        addLog('MFA_SUCCESS');
+        await typeTerminal([
+          '> Verifying OTP...',
+          '> OTP matched.',
+          '> MFA_SUCCESS'
+        ]);
+      } else {
+        result.innerHTML = '<span class="status-danger">Invalid OTP code.</span>';
+        addLog('MFA_FAILURE');
+        await typeTerminal([
+          '> Verifying OTP...',
+          '> OTP mismatch.',
+          '> MFA_FAILURE'
+        ]);
+      }
+    });
+
+    addLog('SYSTEM_READY', '127.0.0.1');
+    switchPage('dashboard');
+    typeTerminal([
+      '> Secure Coding Lab initialized.',
+      '> Choose a demo from sidebar to begin.',
+      '> Monitor live events in Security Logs.'
+    ]);
+  </script>
+</body>
+</html>
