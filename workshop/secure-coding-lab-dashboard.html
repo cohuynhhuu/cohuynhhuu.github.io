@@ -152,6 +152,75 @@
       box-shadow: 0 0 14px rgba(34, 197, 94, 0.28);
     }
 
+    /* Syntax Highlighting for IDE-like appearance */
+    #theoryCode {
+      font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Ubuntu Mono', monospace;
+      background: #0d1117 !important;
+      color: #e6edf3;
+      line-height: 1.5;
+      font-size: 13px;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+    }
+
+    .syntax-keyword {
+      color: #ff7b72;
+      font-weight: 600;
+    }
+
+    .syntax-string {
+      color: #a5d6ff;
+    }
+
+    .syntax-comment {
+      color: #8b949e;
+      font-style: italic;
+    }
+
+    .syntax-function {
+      color: #d2a8ff;
+    }
+
+    .syntax-variable {
+      color: #79c0ff;
+    }
+
+    .syntax-operator {
+      color: #ff7b72;
+    }
+
+    .syntax-number {
+      color: #79c0ff;
+    }
+
+    .syntax-property {
+      color: #79c0ff;
+    }
+
+    .syntax-tag {
+      color: #7ee787;
+    }
+
+    .syntax-error {
+      color: #f85149;
+      background: rgba(248, 81, 73, 0.1);
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+
+    .syntax-success {
+      color: #56d364;
+    }
+
+    .syntax-line-highlight {
+      background: rgba(56, 139, 253, 0.1);
+      display: block;
+      margin-left: -12px;
+      margin-right: -12px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
     .glitch-title {
       position: relative;
       text-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
@@ -388,6 +457,237 @@
       display: flex;
     }
 
+    .qna-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 80;
+      padding: 16px;
+    }
+
+    .qna-modal-backdrop.show {
+      display: flex;
+    }
+
+    .qna-modal {
+      width: 90vw;
+      height: 90vh;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    .qna-modal .image-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    .qna-modal img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .attack-demo-stats {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(34, 197, 94, 0.1));
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .attack-demo-stats::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(34, 197, 94, 0.1), transparent);
+      animation: scanLine 3s linear infinite;
+      opacity: 0;
+    }
+
+    .attack-demo-stats.pulse::before {
+      opacity: 1;
+    }
+
+    @keyframes scanLine {
+      0% { transform: translateX(-100%) translateY(-100%); }
+      100% { transform: translateX(100%) translateY(100%); }
+    }
+
+    .attack-terminal {
+      background: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(15,23,42,0.9));
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      font-family: 'Share Tech Mono', 'JetBrains Mono', monospace;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .attack-terminal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(90deg, transparent 98%, rgba(34, 197, 94, 0.03) 100%),
+        linear-gradient(0deg, transparent 98%, rgba(34, 197, 94, 0.03) 100%);
+      background-size: 20px 20px;
+      pointer-events: none;
+      animation: matrix 20s linear infinite;
+    }
+
+    @keyframes matrix {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-20px) translateX(-20px); }
+    }
+
+    .attack-progress {
+      background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+      height: 6px;
+      border-radius: 3px;
+      transition: width 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      position: relative;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+    }
+
+    .attack-progress::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20px;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+      animation: progressShine 2s ease-in-out infinite;
+    }
+
+    @keyframes progressShine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 0 0 15px currentColor;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .stat-number.animate {
+      transform: scale(1.2);
+      filter: brightness(1.5);
+    }
+
+    .attack-typing {
+      border-right: 3px solid #22c55e;
+      animation: blink 1s infinite, glow 2s ease-in-out infinite alternate;
+      position: relative;
+    }
+
+    .attack-line {
+      position: relative;
+      margin: 2px 0;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .attack-line.warning {
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+
+    .attack-line.success {
+      color: #10b981;
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .attack-line.danger {
+      color: #ef4444;
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+
+    @keyframes slideIn {
+      0% {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 5px #22c55e; }
+      100% { text-shadow: 0 0 20px #22c55e, 0 0 30px #22c55e; }
+    }
+
+    @keyframes blink {
+      0%, 50% { border-color: transparent; }
+      51%, 100% { border-color: #22c55e; }
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: #22c55e;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: particleFall 3s linear infinite;
+    }
+
+    @keyframes particleFall {
+      0% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(400px);
+        opacity: 0;
+      }
+    }
+
+    .screen-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(239, 68, 68, 0.1);
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+
+    .screen-flash.show {
+      opacity: 1;
+    }
+
+    .qna-toggle {
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      background: rgba(251, 191, 36, 0.14);
+      color: #fef3c7;
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.2);
+    }
+
     .quiz-modal {
       width: min(1360px, 100%);
       max-height: min(95vh, 1080px);
@@ -621,6 +921,7 @@
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="sql">SQL Injection</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="xss">XSS Attack</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="mfa">MFA Demo</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="attack-demo">🔥 Live Attack Demo</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="logs">Security Logs</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="quiz">Quiz!</button>
       </nav>
@@ -634,6 +935,14 @@
     <main class="flex flex-col gap-4 min-h-0 h-full">
       <section class="panel rounded-2xl p-5 flex-1 min-h-0 overflow-auto scroll-thin" id="contentHost">
         <div class="flex justify-end mb-4 gap-2 flex-wrap">
+          <button
+            id="btnQnA"
+            class="qna-toggle mode-icon-btn"
+            title="Open Q&A Feedback (Q)"
+            aria-label="Open Q&A Feedback"
+          >
+            <span aria-hidden="true">❓</span>
+          </button>
           <button
             id="btnPresentationMode"
             class="presentation-toggle mode-icon-btn"
@@ -651,6 +960,67 @@
             <span aria-hidden="true">🚀</span>
           </button> -->
         </div>
+
+        <!-- Live Attack Demo Page -->
+        <div class="page" id="page-attack-demo">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-2xl font-bold text-red-400">🔥 Live Attack Simulation Theater</h2>
+              <p class="text-slate-300 text-sm mt-1">Real-time cybersecurity attack demonstration with live monitoring.</p>
+            </div>
+            <button id="btnStartAttackDemo" class="bg-red-600 hover:bg-red-500 px-6 py-3 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+              🚀 Start Live Demo
+            </button>
+          </div>
+
+          <!-- Attack Statistics Dashboard -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="attack-demo-stats rounded-lg p-4 text-center">
+              <div class="stat-number text-red-400" id="attacksLaunched">0</div>
+              <div class="text-xs text-slate-400 uppercase tracking-wider">Attacks Launched</div>
+            </div>
+            <div class="attack-demo-stats rounded-lg p-4 text-center">
+              <div class="stat-number text-yellow-400" id="attacksBlocked">0</div>
+              <div class="text-xs text-slate-400 uppercase tracking-wider">Attacks Blocked</div>
+            </div>
+            <div class="attack-demo-stats rounded-lg p-4 text-center">
+              <div class="stat-number text-green-400" id="systemsSecured">0</div>
+              <div class="text-xs text-slate-400 uppercase tracking-wider">Systems Secured</div>
+            </div>
+            <div class="attack-demo-stats rounded-lg p-4 text-center">
+              <div class="stat-number text-blue-400" id="threatsNeutralized">0</div>
+              <div class="text-xs text-slate-400 uppercase tracking-wider">Threats Neutralized</div>
+            </div>
+          </div>
+
+          <!-- Attack Progress Bar -->
+          <div class="bg-slate-800 rounded-lg p-4 mb-4">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-slate-300 text-sm font-semibold">Attack Progress</span>
+              <span class="text-slate-400 text-xs" id="attackStatus">Ready to Launch</span>
+            </div>
+            <div class="bg-slate-700 rounded-full h-2">
+              <div class="attack-progress" id="attackProgressBar" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Live Attack Terminal -->
+          <div class="attack-terminal rounded-lg p-4 h-80 overflow-auto scroll-thin">
+            <div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-700">
+              <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+              <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span class="text-green-400 text-sm ml-2">attack@simulator:~$</span>
+            </div>
+            <div id="attackTerminalOutput" class="text-green-300 text-sm font-mono leading-relaxed">
+              <div class="text-slate-500">>>> Cyber Attack Simulation Terminal Initialized <<<</div>
+              <div class="text-slate-500">>>> Waiting for demo to start... <<<</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Screen Flash Effect -->
+        <div id="screenFlash" class="screen-flash"></div>
 
         <div class="page active" id="page-dashboard">
           <h2 class="glitch-title text-2xl lg:text-3xl font-bold text-green-400" data-text="Secure Coding Lab Dashboard">Secure Coding Lab Dashboard</h2>
@@ -838,9 +1208,10 @@
               <table class="w-full text-sm">
                 <thead class="bg-slate-800 sticky top-0">
                   <tr>
-                    <th class="text-left p-2">Time</th>
+                    <th class="text-left p-2">DateTime</th>
                     <th class="text-left p-2">Event</th>
                     <th class="text-left p-2">IP</th>
+                    <th class="text-left p-2">User Journey</th>
                   </tr>
                 </thead>
                 <tbody id="logsTableBody"></tbody>
@@ -855,6 +1226,29 @@
         <div id="terminalOutput" class="mt-2 bg-black/50 border border-slate-800 rounded-lg p-3 h-[120px] overflow-auto text-sm text-green-300 scroll-thin"></div>
       </section>
     </main>
+  </div>
+
+  <!-- Q&A Feedback Modal -->
+  <div id="qnaModal" class="qna-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="qnaTitle">
+    <div class="panel qna-modal p-5">
+      <div class="flex items-start justify-between gap-4">
+        <h3 id="qnaTitle" class="text-xl font-bold text-amber-300">Feedback</h3>
+        <button id="btnCloseQnAModal" class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded-lg text-sm flex-shrink-0">Close</button>
+      </div>
+      
+      <div class="image-container">
+        <img src="QnA.png" alt="Q&A Feedback QR Code" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="display: none;" class="text-slate-300 text-center flex flex-col items-center justify-center h-full">
+          <div class="text-4xl mb-4">🔍</div>
+          <p class="text-lg">QnA.png image not found</p>
+          <p class="text-sm text-slate-400 mt-2">Please make sure QnA.png is in the same directory as this HTML file.</p>
+        </div>
+      </div>
+      
+      <div class="text-center flex-shrink-0">
+        <p class="text-slate-300 text-amber-300">Scan the QR code above to provide feedback for this workshop</p>
+      </div>
+    </div>
   </div>
 
   <div id="theoryModal" class="theory-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="theoryTitle">
@@ -973,7 +1367,7 @@
 
     const quizQuestions = [
       {
-        question: '[Easy] What should you do before trusting user input?',
+        question: 'What should you do before trusting user input?',
         options: {
           A: 'Store it immediately without checks',
           B: 'Validate and sanitize it',
@@ -984,7 +1378,7 @@
         explain: 'Validation and sanitization help block malformed and malicious data early.'
       },
       {
-        question: '[Easy] What is the safest way to display untrusted text on a web page?',
+        question: 'What is the safest way to display untrusted text on a web page?',
         options: {
           A: 'Use innerHTML directly',
           B: 'Use textContent or proper encoding',
@@ -1017,7 +1411,7 @@
         explain: 'Parameterized queries separate code from data, so payloads are treated as text.'
       },
       {
-        question: '[Medium] Which input should be validated on the server?',
+        question: 'Which input should be validated on the server?',
         options: {
           A: 'Only password fields',
           B: 'Only query string values',
@@ -1050,7 +1444,7 @@
         explain: 'Security checks must run on server because attackers can skip frontend.'
       },
       {
-        question: '[Hard] A hashed password database leaked. What most reduces attacker success next?',
+        question: 'A hashed password database leaked. What most reduces attacker success next?',
         options: {
           A: 'Force users to clear browser cache',
           B: 'Rotate UI color theme',
@@ -1061,7 +1455,7 @@
         explain: 'Strong adaptive hash with per-user salt slows cracking; password reset limits reuse risk.'
       },
       {
-        question: '[Hard] Which defense-in-depth set is best for web app input handling?',
+        question: 'Which defense-in-depth set is best for web app input handling?',
         options: {
           A: 'Client validation only',
           B: 'WAF only',
@@ -1102,7 +1496,52 @@
           'The team must force password resets and handle support issues.',
           'Users lose trust because basic security was not followed.'
         ],
-        code: `// Vulnerable: plain-text password storage\nvar user = new User { Email = email, Password = password };\n\n// Secure: hash before storing\nuser.PasswordHash = HashPassword(password);`
+        code: `// ❌ VULNERABLE: Plain-text password storage
+const user = {
+  email: email,
+  password: password  // Never do this!
+};
+
+// ✅ SECURE: Hash with salt (Node.js example)
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
+
+async function hashPassword(password) {
+  return await bcrypt.hash(password, saltRounds);
+}
+
+async function verifyPassword(password, hash) {
+  return await bcrypt.compare(password, hash);
+}
+
+// Usage:
+const user = {
+  email: email,
+  passwordHash: await hashPassword(password)
+};
+
+// ✅ SECURE: C# ASP.NET Core example
+public class UserService 
+{
+  public string HashPassword(string password) 
+  {
+    return BCrypt.Net.BCrypt.HashPassword(password, 12);
+  }
+  
+  public bool VerifyPassword(string password, string hash) 
+  {
+    return BCrypt.Net.BCrypt.Verify(password, hash);
+  }
+}
+
+// ✅ Password Policy Example
+function validatePassword(password) {
+  return password.length >= 8 && 
+         /[A-Z]/.test(password) && 
+         /[a-z]/.test(password) && 
+         /[0-9]/.test(password) && 
+         /[^\\w\\s]/.test(password);
+}`
       },
       validation: {
         title: 'Input Validation',
@@ -1121,7 +1560,65 @@
           'Developers spend time cleaning data and fixing avoidable bugs.',
           'System quality drops and user experience becomes worse.'
         ],
-        code: `if (!emailRegex.test(email)) {\n  return badRequest('Invalid email format');\n}\nif (password.length < 8) {\n  return badRequest('Password too short');\n}`
+        code: `// ❌ VULNERABLE: No server-side validation
+app.post('/register', (req, res) => {
+  const { email, password } = req.body;
+  // Directly using user input - dangerous!
+  createUser(email, password);
+});
+
+// ✅ SECURE: Comprehensive validation
+const joi = require('joi');
+
+const userSchema = joi.object({
+  email: joi.string().email().required(),
+  password: joi.string().min(8).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]/).required(),
+  name: joi.string().alphanum().min(2).max(50).required()
+});
+
+app.post('/register', async (req, res) => {
+  try {
+    // Validate input
+    const { error, value } = userSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    
+    // Sanitize data
+    const sanitizedData = {
+      email: value.email.toLowerCase().trim(),
+      password: value.password,
+      name: value.name.trim()
+    };
+    
+    await createUser(sanitizedData);
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ✅ Custom validation functions
+function isValidEmail(email) {
+  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  return emailRegex.test(email) && email.length <= 254;
+}
+
+function sanitizeInput(input) {
+  return input.replace(/[<>\"'%]/g, '').trim();
+}
+
+// ✅ PHP Example
+function validateInput($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    throw new Exception("Invalid email format");
+}`
       },
       sql: {
         title: 'SQL Injection',
@@ -1140,7 +1637,49 @@
           'Business data can be corrupted, causing wrong reports and decisions.',
           'Recovery takes time and can interrupt normal operations.'
         ],
-        code: `// Vulnerable\nconst q = "SELECT * FROM users WHERE email='" + email + "' AND password='" + password + "'";\n\n// Safe (parameterized)\nconst qSafe = 'SELECT * FROM users WHERE email = ? AND password = ?';`
+        code: `// ❌ VULNERABLE: String concatenation
+const query = "SELECT * FROM users WHERE email='" + email + "' AND password='" + password + "'";
+// Attacker input: email = "admin@site.com' OR '1'='1' --"
+// Results in: SELECT * FROM users WHERE email='admin@site.com' OR '1'='1' --' AND password='...'
+
+// ✅ SECURE: Parameterized queries (Node.js)
+const query = 'SELECT * FROM users WHERE email = ? AND password = ?';
+db.query(query, [email, passwordHash], (err, results) => {
+  // Safe: parameters are properly escaped
+});
+
+// ✅ SECURE: Prepared statements (PHP)
+$stmt = $pdo->prepare('SELECT * FROM users WHERE email = ? AND password = ?');
+$stmt->execute([$email, $passwordHash]);
+$user = $stmt->fetch();
+
+// ✅ SECURE: Entity Framework (C#)
+var user = context.Users
+    .Where(u => u.Email == email && u.PasswordHash == passwordHash)
+    .FirstOrDefault();
+
+// ✅ SECURE: Named parameters (Python)
+cursor.execute(
+    "SELECT * FROM users WHERE email = %(email)s AND password = %(password)s",
+    {'email': email, 'password': password_hash}
+)
+
+// ✅ Input sanitization helper
+function sanitizeForSQL(input) {
+  // Remove dangerous characters
+  return input.replace(/[';\\x00\\n\\r\\\\\\\"\\x1a]/g, '');
+}
+
+// ✅ Stored procedure example (SQL Server)
+CREATE PROCEDURE GetUser
+    @Email NVARCHAR(100),
+    @PasswordHash NVARCHAR(255)
+AS
+SELECT * FROM Users 
+WHERE Email = @Email AND PasswordHash = @PasswordHash
+
+// Usage:
+EXEC GetUser @Email = ?, @PasswordHash = ?`
       },
       xss: {
         title: 'XSS Attack',
@@ -1159,7 +1698,57 @@
           'Users see strange popups or modified pages and lose trust.',
           'Security incidents become public and hurt product reputation.'
         ],
-        code: `// Vulnerable\noutput.innerHTML = 'Hello, ' + userInput;\n\n// Safer\noutput.textContent = 'Hello, ' + userInput;`
+        code: `// ❌ VULNERABLE: Direct HTML insertion
+document.getElementById('welcome').innerHTML = 'Hello, ' + userName;
+// Attacker input: &lt;script&gt;alert('XSS')&lt;/script&gt;
+// Result: Script executes!
+
+// ✅ SECURE: Text content only
+document.getElementById('welcome').textContent = 'Hello, ' + userName;
+
+// ✅ SECURE: HTML escaping function
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+document.getElementById('welcome').innerHTML = 'Hello, ' + escapeHtml(userName);
+
+// ✅ SECURE: Server-side templating (Express.js + Handlebars)
+app.get('/profile', (req, res) => {
+  res.render('profile', {
+    userName: req.user.name  // Handlebars auto-escapes
+  });
+});
+
+// ✅ SECURE: Content Security Policy (CSP)
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", 
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'");
+  next();
+});
+
+// ✅ SECURE: React (auto-escapes)
+function Welcome({ userName }) {
+  return <h1>Hello, {userName}</h1>;  // Safe by default
+}
+
+// ✅ SECURE: Input sanitization
+const DOMPurify = require('dompurify');
+const clean = DOMPurify.sanitize(userInput);
+
+// ✅ SECURE: PHP example
+echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8');
+
+// ✅ Validation for HTML content
+function isValidHTML(input) {
+  const allowedTags = ['b', 'i', 'em', 'strong'];
+  // Use HTML parsing library to validate
+  return sanitizeHTML(input, allowedTags);
+}`
       },
       mfa: {
         title: 'MFA Protection',
@@ -1177,7 +1766,103 @@
           'MFA blocks most automated account takeover attempts.',
           'Fewer incidents means less support and recovery workload.',
           'Overall account security improves significantly.'
-        ]
+        ],
+        code: `// ✅ TOTP (Time-based OTP) Implementation (Node.js)
+const speakeasy = require('speakeasy');
+
+// Generate secret for user
+function generateMFASecret(userName) {
+  return speakeasy.generateSecret({
+    name: 'YourApp',
+    account: userName,
+    length: 32
+  });
+}
+
+// Verify OTP from user
+function verifyOTP(secret, token) {
+  return speakeasy.totp.verify({
+    secret: secret,
+    encoding: 'base32',
+    token: token,
+    window: 1  // Allow 1 step tolerance
+  });
+}
+
+// ✅ Complete MFA Login Flow
+async function loginWithMFA(email, password, otpToken) {
+  // Step 1: Verify password
+  const user = await User.findOne({ email });
+  if (!user || !await bcrypt.compare(password, user.passwordHash)) {
+    throw new Error('Invalid credentials');
+  }
+  
+  // Step 2: Check if MFA is enabled
+  if (user.mfaEnabled) {
+    if (!otpToken) {
+      return { requiresOTP: true };
+    }
+    
+    // Step 3: Verify OTP
+    if (!verifyOTP(user.mfaSecret, otpToken)) {
+      throw new Error('Invalid OTP');
+    }
+  }
+  
+  // Step 4: Create session
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+  return { token, user: { id: user.id, email: user.email } };
+}
+
+// ✅ SMS-based MFA alternative
+const twilio = require('twilio');
+
+async function sendSMSCode(phoneNumber) {
+  const code = Math.floor(100000 + Math.random() * 900000);
+  await client.messages.create({
+    body: \`Your verification code is: \${code}\`,
+    from: '+1234567890',
+    to: phoneNumber
+  });
+  return code;
+}
+
+// ✅ Backup codes implementation
+function generateBackupCodes() {
+  const codes = [];
+  for (let i = 0; i < 10; i++) {
+    codes.push(crypto.randomBytes(4).toString('hex').toUpperCase());
+  }
+  return codes;
+}
+
+// ✅ Rate limiting for MFA attempts
+const rateLimit = require('express-rate-limit');
+
+const mfaLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limit each IP to 5 requests per windowMs
+  message: 'Too many MFA attempts, please try again later.'
+});
+
+app.post('/verify-mfa', mfaLimiter, async (req, res) => {
+  // MFA verification logic
+});
+
+// ✅ C# Example with TOTP
+public class MFAService
+{
+    public string GenerateSecret()
+    {
+        return Base32Encoding.ToString(KeyGeneration.GenerateRandomKey(20));
+    }
+    
+    public bool VerifyCode(string secret, string code)
+    {
+        var totp = new Totp(Base32Encoding.ToBytes(secret));
+        return totp.VerifyTotp(code, out long timeStepMatched, new VerificationWindow(2, 2));
+    }
+}`
       },
       logs: {
         title: 'Security Logging & Auditing',
@@ -1196,7 +1881,133 @@
           'Incident response becomes slower and less accurate.',
           'Company reputation and compliance readiness both suffer.'
         ],
-        code: `logSecurityEvent({\n  eventType: 'LoginFailure',\n  ip: clientIp,\n  userAgent,\n  timestamp: new Date().toISOString()\n});`
+        code: `// ✅ Structured Security Logging (Node.js)
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.metadata({ fillExcept: ['message', 'level', 'timestamp'] }),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'security.log' })
+  ]
+});
+
+function logSecurityEvent(eventType, metadata) {
+  logger.info('Security Event', {
+    eventType,
+    timestamp: new Date().toISOString(),
+    ...metadata
+  });
+}
+
+// ✅ Usage Examples
+// Login failure
+logSecurityEvent('LOGIN_FAILURE', {
+  email: req.body.email,
+  ip: req.ip,
+  userAgent: req.get('User-Agent'),
+  reason: 'Invalid password'
+});
+
+// Successful login
+logSecurityEvent('LOGIN_SUCCESS', {
+  userId: user.id,
+  email: user.email,
+  ip: req.ip,
+  mfaUsed: user.mfaEnabled
+});
+
+// Failed MFA attempt
+logSecurityEvent('MFA_FAILURE', {
+  userId: user.id,
+  ip: req.ip,
+  attempts: session.mfaAttempts
+});
+
+// Password change
+logSecurityEvent('PASSWORD_CHANGE', {
+  userId: user.id,
+  ip: req.ip,
+  method: 'self-service'
+});
+
+// ✅ Suspicious activity detection
+function checkSuspiciousLogin(ip, userId) {
+  const recentLogins = getRecentLogins(userId, '24h');
+  const ipLocations = recentLogins.map(login => getIPLocation(login.ip));
+  
+  if (ipLocations.some(loc => loc.distance > 500)) {  // km
+    logSecurityEvent('SUSPICIOUS_LOGIN', {
+      userId,
+      ip,
+      reason: 'Impossible travel detected',
+      previousLocations: ipLocations
+    });
+  }
+}
+
+// ✅ Audit log for admin actions
+function logAdminAction(adminId, action, target) {
+  logger.warn('Admin Action', {
+    eventType: 'ADMIN_ACTION',
+    adminId,
+    action,
+    target,
+    timestamp: new Date().toISOString()
+  });
+}
+
+// Usage:
+logAdminAction(req.user.id, 'DELETE_USER', targetUserId);
+
+// ✅ Log aggregation and alerting
+const alerts = {
+  MULTIPLE_LOGIN_FAILURES: {
+    threshold: 5,
+    window: '5m',
+    action: 'SEND_ALERT'
+  },
+  ADMIN_PRIVILEGE_ESCALATION: {
+    threshold: 1,
+    window: '1d',
+    action: 'IMMEDIATE_ALERT'
+  }
+};
+
+// ✅ Python example with structured logging
+import logging
+import json
+from datetime import datetime
+
+class SecurityLogger:
+    def __init__(self):
+        logging.basicConfig(
+            filename='security.log',
+            level=logging.INFO,
+            format='%(message)s'
+        )
+        self.logger = logging.getLogger('security')
+    
+    def log_event(self, event_type, **kwargs):
+        log_entry = {
+            'timestamp': datetime.utcnow().isoformat(),
+            'event_type': event_type,
+            **kwargs
+        }
+        self.logger.info(json.dumps(log_entry))
+
+# Usage:
+security_logger = SecurityLogger()
+security_logger.log_event(
+    'LOGIN_FAILURE',
+    email=email,
+    ip=request.remote_addr,
+    reason='Invalid password'
+)`
       }
     };
 
@@ -1207,6 +2018,48 @@
         li.textContent = item;
         targetElement.appendChild(li);
       });
+    }
+
+    function syntaxHighlight(code) {
+      if (!code) return '';
+      
+      // First escape HTML to prevent XSS
+      code = code.replace(/[&<>"']/g, function(match) {
+        const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+        return escapeMap[match];
+      });
+
+      // Keywords
+      code = code.replace(/\b(const|let|var|function|async|await|if|else|for|while|do|break|continue|return|try|catch|finally|throw|new|this|class|extends|import|export|from|default|public|private|protected|static|abstract|interface|enum|namespace|module|declare|type|readonly|as|is|keyof|typeof|instanceof|in|of|void|null|undefined|true|false|string|number|boolean|any|object|array|Promise|Date|RegExp|Error|Map|Set|WeakMap|WeakSet|Symbol|Proxy|Reflect|JSON|Math|console|window|document|global|process|require|__dirname|__filename|Buffer|setTimeout|setInterval|clearTimeout|clearInterval|using|app|router|express|mongoose|bcrypt|jwt|passport|helmet|cors|dotenv|fs|path|http|https|url|querystring|crypto|os|events|stream|util|assert|zlib|readline|cluster|child_process|worker_threads|perf_hooks|async_hooks|buffer|dns|domain|net|tls|dgram|vm|repl|diagnostics_channel|inspector|test|coverage)\b/g, '<span class="syntax-keyword">$1</span>');
+
+      // Functions
+      code = code.replace(/([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g, '<span class="syntax-function">$1</span>');
+
+      // Strings (handle both single and double quotes)
+      code = code.replace(/(['"`])((?:\\.|(?!\1)[^\\\r\n])*)\1/g, '<span class="syntax-string">$1$2$1</span>');
+
+      // Comments (// and /* */ and #)
+      code = code.replace(/(^\/\/.*$|^\/\*[\s\S]*?\*\/|^#.*$)/gm, '<span class="syntax-comment">$1</span>');
+
+      // Numbers
+      code = code.replace(/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g, '<span class="syntax-number">$1</span>');
+
+      // Properties and object keys
+      code = code.replace(/\.([a-zA-Z_$][a-zA-Z0-9_$]*)/g, '.<span class="syntax-property">$1</span>');
+
+      // Operators
+      code = code.replace(/([+\-*/=&|!<>%^~?:;,])/g, '<span class="syntax-operator">$1</span>');
+
+      // HTML/XML tags for web examples
+      code = code.replace(/&lt;\/?([a-zA-Z][a-zA-Z0-9]*)[^&]*?&gt;/g, '<span class="syntax-tag">$&</span>');
+
+      // Error indicators
+      code = code.replace(/(❌\s*VULNERABLE|❌\s*BROKEN|ERROR|DANGER|INSECURE)/gi, '<span class="syntax-error">$1</span>');
+
+      // Success indicators
+      code = code.replace(/(✅\s*SECURE|✅\s*SAFE|✅\s*FIXED|SUCCESS|SAFE)/gi, '<span class="syntax-success">$1</span>');
+
+      return code;
     }
 
     function openTheoryModal(topic) {
@@ -1341,6 +2194,13 @@
       }
       navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.page === page));
       pages.forEach(p => p.classList.toggle('active', p.id === `page-${page}`));
+      
+      // Initialize Attack Demo when navigating to that page
+      if (page === 'attack-demo') {
+        setTimeout(() => {
+          initializeAttackDemo();
+        }, 100);
+      }
     }
 
     navButtons.forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.page)));
@@ -1410,6 +2270,31 @@
       setViewMode(viewMode === 'presentation' ? 'normal' : 'presentation');
     });
 
+    // Q&A Modal Functions
+    const btnQnA = document.getElementById('btnQnA');
+    const qnaModal = document.getElementById('qnaModal');
+    const btnCloseQnAModal = document.getElementById('btnCloseQnAModal');
+
+    function openQnAModal() {
+      qnaModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeQnAModal() {
+      qnaModal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    btnQnA.addEventListener('click', openQnAModal);
+    btnCloseQnAModal.addEventListener('click', closeQnAModal);
+
+    // Close Q&A modal when clicking outside
+    qnaModal.addEventListener('click', (event) => {
+      if (event.target === qnaModal) {
+        closeQnAModal();
+      }
+    });
+
     if (btnUltraPresentationMode) {
       btnUltraPresentationMode.addEventListener('click', () => {
         setViewMode(viewMode === 'ultra' ? 'normal' : 'ultra');
@@ -1421,6 +2306,12 @@
         const activeTag = document.activeElement?.tagName?.toLowerCase();
         if (activeTag === 'input' || activeTag === 'textarea') return;
         setViewMode(viewMode === 'presentation' ? 'normal' : 'presentation');
+      }
+
+      if (event.key.toLowerCase() === 'q' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        const activeTag = document.activeElement?.tagName?.toLowerCase();
+        if (activeTag === 'input' || activeTag === 'textarea') return;
+        openQnAModal();
       }
 
       if (event.key.toLowerCase() === 'u' && !event.ctrlKey && !event.metaKey && !event.altKey) {
@@ -1437,6 +2328,10 @@
         closeQuizModal();
       }
 
+      if (event.key === 'Escape' && qnaModal.classList.contains('show')) {
+        closeQnAModal();
+      }
+
       if (event.key === 'Escape' && quizAnswerModal.classList.contains('show')) {
         closeAnswerModal();
       }
@@ -1447,11 +2342,28 @@
       return `${part()}.${part()}.${part()}.${part()}`;
     }
 
+    // Old attack demo code removed - now initialized dynamically
+
     function addLog(eventName, ip = randomIp()) {
+      const now = new Date();
+      const userFlows = [
+        'Login → Dashboard',
+        'Register → Verification',
+        'Browse → Purchase',
+        'Admin → User Management',
+        'Search → Product View',
+        'Cart → Checkout',
+        'Profile → Settings',
+        'Upload → File Process',
+        'API → Database Query',
+        'Session → Authentication'
+      ];
+      
       const entry = {
-        time: new Date().toLocaleTimeString(),
+        time: now.toLocaleDateString() + ' ' + now.toLocaleTimeString(),
         event: eventName,
-        ip
+        ip,
+        userFlow: userFlows[Math.floor(Math.random() * userFlows.length)]
       };
       state.logs.unshift(entry);
       renderLogs();
@@ -1463,9 +2375,10 @@
         const tr = document.createElement('tr');
         tr.className = 'border-t border-slate-800';
         tr.innerHTML = `
-          <td class="p-2 text-slate-300">${log.time}</td>
+          <td class="p-2 text-slate-300 text-xs">${log.time}</td>
           <td class="p-2 ${log.event.includes('FAILURE') || log.event.includes('ATTEMPT') ? 'text-red-400' : 'text-green-300'}">${log.event}</td>
           <td class="p-2 text-slate-400">${log.ip}</td>
+          <td class="p-2 text-blue-300 text-xs">${log.userFlow || 'Unknown Flow'}</td>
         `;
         logsTableBody.appendChild(tr);
       });
@@ -1819,11 +2732,268 @@
 
     addLog('SYSTEM_READY', '127.0.0.1');
     switchPage('dashboard');
+    
+    // Initialize Attack Demo after DOM is ready
+    setTimeout(() => {
+      initializeAttackDemo();
+    }, 100);
+
+    // Attack Demo System
+    function initializeAttackDemo() {
+      const btnStartAttackDemo = document.getElementById('btnStartAttackDemo');
+      const attackTerminalOutput = document.getElementById('attackTerminalOutput');
+      const attackProgressBar = document.getElementById('attackProgressBar');
+      const attackStatus = document.getElementById('attackStatus');
+      const attacksLaunchedEl = document.getElementById('attacksLaunched');
+      const attacksBlockedEl = document.getElementById('attacksBlocked');
+      const systemsSecuredEl = document.getElementById('systemsSecured');
+      const threatsNeutralizedEl = document.getElementById('threatsNeutralized');
+      const screenFlash = document.getElementById('screenFlash');
+
+      // Skip if elements not found (not on attack demo page)
+      if (!btnStartAttackDemo || !attackTerminalOutput) {
+        console.log('Attack demo elements not found, skipping initialization');
+        return;
+      }
+
+      // Skip if already initialized
+      if (btnStartAttackDemo.dataset.initialized === 'true') {
+        console.log('Attack demo already initialized');
+        return;
+      }
+
+      console.log('Initializing Attack Demo System');
+
+      let attackDemoRunning = false;
+      let lastScenarioIndex = -1;
+      let particleInterval;
+      let attackStats = {
+        launched: 0,
+        blocked: 0,
+        secured: 0,
+        neutralized: 0
+      };
+
+      const attackScenarios = [
+        {
+          name: 'SQL Injection Attack',
+          steps: [
+            'Scanning target database for vulnerabilities...',
+            'Found unprotected login form at /admin/login.php',
+            "Injecting payload: ' OR 1=1 --",
+            'ERROR: SQL syntax error detected!',
+            '🛡️ Attack BLOCKED by input validation!'
+          ],
+          type: 'blocked'
+        },
+        {
+          name: 'Cross-Site Scripting (XSS)',
+          steps: [
+            'Targeting user input fields...',
+            'Preparing malicious script injection...',
+            'Payload: &lt;script&gt;alert("XSS")&lt;/script&gt;',
+            'Attempting to execute in browser...',
+            '🔒 Content Security Policy blocked execution!'
+          ],
+          type: 'blocked'
+        },
+        {
+          name: 'Brute Force Login Attack',
+          steps: [
+            'Initiating password brute force attack...',
+            'Attempting common passwords...',
+            'Trying: admin, password, 123456...',
+            'Rate limiting detected: 429 Too Many Requests',
+            '⚡ Account temporarily locked - Attack neutralized!'
+          ],
+          type: 'neutralized'
+        },
+        {
+          name: 'DDoS Attack Simulation',
+          steps: [
+            'Coordinating botnet for DDoS attack...',
+            'Sending flood of requests to server...',
+            'Server load increasing: 95% CPU usage',
+            'WAF (Web Application Firewall) activated!',
+            '🚨 Malicious traffic filtered - System secured!'
+          ],
+          type: 'secured'
+        },
+        {
+          name: 'File Upload Vulnerability',
+          steps: [
+            'Scanning for file upload endpoints...',
+            'Found upload form: /api/upload',
+            'Attempting to upload malicious .php file...',
+            'File type validation checking...',
+            '✅ Only safe file types allowed - Attack blocked!'
+          ],
+          type: 'blocked'
+        }
+      ];
+
+      function playAttackSound(type) {
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          const filterNode = audioContext.createBiquadFilter();
+          
+          oscillator.connect(filterNode);
+          filterNode.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          if (type === 'alert') {
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(1400, audioContext.currentTime + 0.1);
+            filterNode.frequency.setValueAtTime(2000, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.4);
+            if (screenFlash) {
+              screenFlash.classList.add('show');
+              setTimeout(() => screenFlash.classList.remove('show'), 150);
+            }
+          } else if (type === 'success') {
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(880, audioContext.currentTime + 0.3);
+            gainNode.gain.setValueAtTime(0.12, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+          } else if (type === 'typing') {
+            oscillator.frequency.setValueAtTime(800 + Math.random() * 400, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.08);
+          }
+        } catch (e) {
+          // Silent fail
+        }
+      }
+
+      async function typeText(text, container, speed = 40, className = '') {
+        const line = document.createElement('div');
+        line.className = `attack-typing attack-line ${className}`;
+        container.appendChild(line);
+        
+        for (let i = 0; i <= text.length; i++) {
+          if (!attackDemoRunning) break;
+          line.textContent = text.substring(0, i);
+          if (Math.random() > 0.7) playAttackSound('typing');
+          await new Promise(resolve => setTimeout(resolve, speed + Math.random() * 30));
+        }
+        
+        line.classList.remove('attack-typing');
+        container.scrollTop = container.scrollHeight;
+      }
+
+      function updateStats(type) {
+        attackStats.launched++;
+        if (type === 'blocked') attackStats.blocked++;
+        else if (type === 'secured') attackStats.secured++;
+        else if (type === 'neutralized') attackStats.neutralized++;
+        
+        if (attacksLaunchedEl) attacksLaunchedEl.textContent = attackStats.launched;
+        if (attacksBlockedEl) attacksBlockedEl.textContent = attackStats.blocked;
+        if (systemsSecuredEl) systemsSecuredEl.textContent = attackStats.secured;
+        if (threatsNeutralizedEl) threatsNeutralizedEl.textContent = attackStats.neutralized;
+      }
+
+      function updateProgress(percentage) {
+        if (attackProgressBar) {
+          attackProgressBar.style.width = percentage + '%';
+        }
+      }
+
+      async function runAttackScenario(scenario) {
+        if (!attackDemoRunning) return;
+        
+        if (attackStatus) attackStatus.textContent = `Running: ${scenario.name}`;
+        playAttackSound('alert');
+        
+        await typeText(`=== ${scenario.name.toUpperCase()} ===`, attackTerminalOutput, 30, 'danger');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        for (let i = 0; i < scenario.steps.length; i++) {
+          if (!attackDemoRunning) break;
+          
+          const step = scenario.steps[i];
+          let className = '';
+          let prefix = '[ATTACK]';
+          
+          if (step.includes('🛡️') || step.includes('🔒') || step.includes('⚡') || step.includes('🚨') || step.includes('✅')) {
+            className = 'success';
+            prefix = '[DEFENSE]';
+            playAttackSound('success');
+          } else if (step.includes('ERROR') || step.includes('detected')) {
+            className = 'warning';
+            prefix = '[WARNING]';
+            playAttackSound('alert');
+          }
+          
+          await typeText(`${prefix} ${step}`, attackTerminalOutput, 40, className);
+          updateProgress(((i + 1) / scenario.steps.length) * 100);
+          await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+        
+        updateStats(scenario.type);
+        addLog(`${scenario.name} - ${scenario.type.toUpperCase()}`);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+
+      async function startAttackDemo() {
+        console.log('startAttackDemo called, attackDemoRunning:', attackDemoRunning);
+        if (attackDemoRunning) {
+          attackDemoRunning = false;
+          btnStartAttackDemo.innerHTML = '🚀 Start Live Demo';
+          btnStartAttackDemo.className = 'bg-red-600 hover:bg-red-500 px-6 py-3 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg';
+          if (attackStatus) attackStatus.textContent = 'Demo Stopped';
+          updateProgress(0);
+          return;
+        }
+        
+        attackDemoRunning = true;
+        btnStartAttackDemo.innerHTML = '⏹️ Stop Demo';
+        btnStartAttackDemo.className = 'bg-gray-600 hover:bg-gray-500 px-6 py-3 rounded-lg text-lg font-semibold transition-all duration-300';
+        
+        attackTerminalOutput.innerHTML = '';
+        await typeText('>>> INITIATING LIVE CYBER ATTACK SIMULATION <<<', attackTerminalOutput, 30, 'success');
+        await typeText('>>> All attacks are simulated and harmless <<<', attackTerminalOutput, 30, 'warning');
+        await typeText('>>> Educational purposes only <<<', attackTerminalOutput, 30, 'warning');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        while (attackDemoRunning) {
+          let randomIndex;
+          do {
+            randomIndex = Math.floor(Math.random() * attackScenarios.length);
+          } while (randomIndex === lastScenarioIndex && attackScenarios.length > 1);
+          
+          lastScenarioIndex = randomIndex;
+          await runAttackScenario(attackScenarios[randomIndex]);
+          
+          if (attackDemoRunning) {
+            if (attackStatus) attackStatus.textContent = 'Preparing next attack...';
+            updateProgress(0);
+            await new Promise(resolve => setTimeout(resolve, 3000));
+          }
+        }
+      }
+
+      btnStartAttackDemo.addEventListener('click', startAttackDemo);
+      btnStartAttackDemo.dataset.initialized = 'true';
+      console.log('Attack Demo event listener attached');
+    }
+
+    // Initialize terminal on page load
     typeTerminal([
       '> Secure Coding Lab initialized.',
       '> Choose a demo from sidebar to begin.',
       '> Monitor live events in Security Logs.'
     ]);
+
   </script>
 </body>
 </html>
