@@ -921,7 +921,7 @@
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="sql">SQL Injection</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="xss">XSS Attack</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="mfa">MFA Demo</button>
-        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="attack-demo">🔥 Live Attack Demo</button>
+        <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="attack-demo" style="display: none;">🔥 Live Attack Demo</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="logs">Security Logs</button>
         <button class="nav-item text-left px-3 py-2 rounded-lg border border-slate-700" data-page="quiz">Quiz!</button>
       </nav>
@@ -1360,121 +1360,121 @@
     const quizAnswerText = document.getElementById('quizAnswerText');
     const quizAnswerExplain = document.getElementById('quizAnswerExplain');
     let viewMode = 'normal';
-    let pendingTheoryTarget = null;
+    let pendingTheoryTarget = null; //
     let currentQuizIndex = 0;
     let quizStatusFadeTimer = null;
     let quizStatusClearTimer = null;
 
     const quizQuestions = [
       {
-        question: 'What should you do before trusting user input?',
+        question: 'Which is the most secure way to store user passwords in a database?',
         options: {
-          A: 'Store it immediately without checks',
-          B: 'Validate and sanitize it',
-          C: 'Only trust input from mobile users',
-          D: 'Encode it to Base64 only'
-        },
-        correct: 'B',
-        explain: 'Validation and sanitization help block malformed and malicious data early.'
-      },
-      {
-        question: 'What is the safest way to display untrusted text on a web page?',
-        options: {
-          A: 'Use innerHTML directly',
-          B: 'Use textContent or proper encoding',
-          C: 'Put it inside a hidden field',
-          D: 'Wrap it in script tags'
-        },
-        correct: 'B',
-        explain: 'Rendering as plain text prevents browser from executing attacker HTML/JavaScript.'
-      },
-      {
-        question: 'What is the safest way to store user passwords?',
-        options: {
-          A: 'Save plain text password in database',
-          B: 'Encrypt with a fixed key and share key with team',
-          C: 'Hash password with salt',
-          D: 'Store password in browser localStorage'
+          A: 'Store password in plain text',
+          B: 'Encrypt password using Base64',
+          C: 'Hash password using bcrypt with salt',
+          D: 'Store password in a hidden column'
         },
         correct: 'C',
-        explain: 'Hash + salt protects passwords even if database data is leaked.'
+        explain: 'Passwords should be hashed using algorithms like bcrypt, Argon2 or PBKDF2, not stored or encoded.'
       },
       {
-        question: 'Which is the main defense against SQL Injection?',
+        question: 'Which coding technique helps prevent SQL Injection attacks?',
         options: {
-          A: 'Client-side validation only',
-          B: 'Parameterized queries',
-          C: 'Hide SQL errors from users only',
-          D: 'Use longer table names'
+          A: 'Using string concatenation in SQL queries',
+          B: 'Using parameterized queries / prepared statements',
+          C: 'Using longer SQL queries',
+          D: 'Hiding database errors'
         },
         correct: 'B',
-        explain: 'Parameterized queries separate code from data, so payloads are treated as text.'
+        explain: 'Parameterized queries ensure user input is treated as data, not executable SQL.'
       },
       {
-        question: 'Which input should be validated on the server?',
+        question: 'Which JavaScript method is safer for rendering user input?',
         options: {
-          A: 'Only password fields',
-          B: 'Only query string values',
-          C: 'Only JSON body fields',
-          D: 'All external input sources'
+          A: 'innerHTML',
+          B: 'document.write()',
+          C: 'textContent',
+          D: 'eval()'
+        },
+        correct: 'C',
+        explain: 'textContent prevents execution of injected HTML or scripts.'
+      },
+      {
+        question: 'What is the main purpose of Multi-Factor Authentication (MFA)?',
+        options: {
+          A: 'Speed up login',
+          B: 'Reduce server load',
+          C: 'Add an extra layer of identity verification',
+          D: 'Replace passwords completely'
+        },
+        correct: 'C',
+        explain: 'MFA requires two or more authentication factors.'
+      },
+      {
+        question: 'Which method helps prevent brute force login attacks?',
+        options: {
+          A: 'Allow unlimited login attempts',
+          B: 'Use CAPTCHA and rate limiting',
+          C: 'Disable password login',
+          D: 'Increase password length only'
+        },
+        correct: 'B',
+        explain: 'Rate limiting and CAPTCHA slow down automated attacks.'
+      },
+      {
+        question: 'Where should input validation be performed?',
+        options: {
+          A: 'Only on the frontend',
+          B: 'Only in the database',
+          C: 'On both frontend and backend',
+          D: 'Only by the browser'
+        },
+        correct: 'C',
+        explain: 'Frontend validation improves UX, but backend validation is mandatory for security.'
+      },
+      {
+        question: 'Which password is the strongest?',
+        options: {
+          A: '123456',
+          B: 'password123',
+          C: 'John1999',
+          D: 'T9#kP2!qL7'
         },
         correct: 'D',
-        explain: 'Anything from clients, headers, params, body, or files must be treated as untrusted.'
+        explain: 'Strong passwords include uppercase, lowercase, numbers, and special characters.'
       },
       {
-        question: 'Why is XSS dangerous?',
+        question: 'Why is security logging important in cybersecurity?',
         options: {
-          A: 'It makes the page load faster',
-          B: 'It can execute attacker script in victim browser',
-          C: 'It only affects server CPU',
-          D: 'It automatically encrypts cookies'
+          A: 'To increase system speed',
+          B: 'To detect and investigate attacks',
+          C: 'To reduce database size',
+          D: 'To hide system errors'
         },
         correct: 'B',
-        explain: 'XSS lets attackers run script to steal sessions or manipulate page content.'
+        explain: 'Security logs help detect suspicious activity and support incident investigation.'
       },
       {
-        question: 'What is the biggest weakness of client-side validation only?',
+        question: 'What is the key principle of the Zero Trust security model?',
         options: {
-          A: 'It is too fast',
-          B: 'It always blocks SQL Injection',
-          C: 'Attackers can bypass it and call API directly',
-          D: 'It requires HTTPS'
+          A: 'Trust all users inside the network',
+          B: 'Trust users after login',
+          C: 'Never trust, always verify',
+          D: 'Only verify administrators'
         },
         correct: 'C',
-        explain: 'Security checks must run on server because attackers can skip frontend.'
+        explain: 'Zero Trust assumes every access request must be verified, even inside the network.'
       },
       {
-        question: 'A hashed password database leaked. What most reduces attacker success next?',
+        question: 'Which is one of the most common web application attacks?',
         options: {
-          A: 'Force users to clear browser cache',
-          B: 'Rotate UI color theme',
-          C: 'Unique salts + strong adaptive hashing + reset exposed passwords',
-          D: 'Hide login page for one day'
+          A: 'SQL Injection',
+          B: 'Printer hacking',
+          C: 'Monitor hacking',
+          D: 'Keyboard hacking'
         },
-        correct: 'C',
-        explain: 'Strong adaptive hash with per-user salt slows cracking; password reset limits reuse risk.'
-      },
-      {
-        question: 'Which defense-in-depth set is best for web app input handling?',
-        options: {
-          A: 'Client validation only',
-          B: 'WAF only',
-          C: 'Server validation + parameterized queries + output encoding + least privilege',
-          D: 'Disable logs to reduce noise'
-        },
-        correct: 'C',
-        explain: 'Layered controls reduce risk across input, database, rendering, and system access.'
-      },
-      {
-        question: 'How does MFA improve login security?',
-        options: {
-          A: 'It removes the need for password',
-          B: 'It adds a second factor like OTP code',
-          C: 'It stores more data in browser',
-          D: 'It disables logs'
-        },
-        correct: 'B',
-        explain: 'Even if password leaks, attacker still needs the second factor.'
+        correct: 'A',
+        explain: 'SQL Injection has been a top vulnerability in OWASP Top 10 for many years.'
       }
     ];
 
@@ -2020,6 +2020,76 @@ security_logger.log_event(
       });
     }
 
+    function theoryCodeHighlight(code) {
+      if (!code) return '';
+      
+      // Store and highlight strings first before escaping
+      const stringMap = new Map();
+      let stringCounter = 0;
+      
+      // Find and replace strings with placeholders
+      code = code.replace(/(['"`])((?:\\.|(?!\1)[^\\\r\n])*)\1/g, (match, quote, content) => {
+        const placeholder = `__STRING_${stringCounter++}__`;
+        stringMap.set(placeholder, `<span class="syntax-string">${quote}${content}${quote}</span>`);
+        return placeholder;
+      });
+
+      // Find and replace comments before escaping
+      const commentMap = new Map();
+      let commentCounter = 0;
+      
+      code = code.replace(/(\/\/.*$)/gm, (match) => {
+        const placeholder = `__COMMENT_${commentCounter++}__`;
+        commentMap.set(placeholder, `<span class="syntax-comment">${match}</span>`);
+        return placeholder;
+      });
+      
+      code = code.replace(/(\/\*[\s\S]*?\*\/)/g, (match) => {
+        const placeholder = `__COMMENT_${commentCounter++}__`;
+        commentMap.set(placeholder, `<span class="syntax-comment">${match}</span>`);
+        return placeholder;
+      });
+      
+      code = code.replace(/(^#.*$)/gm, (match) => {
+        const placeholder = `__COMMENT_${commentCounter++}__`;
+        commentMap.set(placeholder, `<span class="syntax-comment">${match}</span>`);
+        return placeholder;
+      });
+
+      // Now escape HTML (but strings and comments are protected)
+      code = code.replace(/[&<>"']/g, function(match) {
+        const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+        return escapeMap[match];
+      });
+
+      // Apply remaining syntax highlighting
+      const keywords = 'const|let|var|function|async|await|if|else|for|while|do|break|continue|return|try|catch|finally|throw|new|this|class|extends|import|export|from|default|public|private|protected|static|abstract|interface|enum|namespace|module|declare|type|readonly|as|is|keyof|typeof|instanceof|in|of|void|null|undefined|true|false|string|number|boolean|any|object|array|Promise|Date|RegExp|Error|Map|Set|WeakMap|WeakSet|Symbol|Proxy|Reflect|JSON|Math|console|window|document|global|process|require|Buffer|setTimeout|setInterval|clearTimeout|clearInterval|using|app|router|express|mongoose|bcrypt|jwt|passport|helmet|cors|dotenv|fs|path|http|https|url|querystring|crypto|os|events|stream|util|assert|zlib|readline|cluster|child_process|worker_threads|perf_hooks|async_hooks|buffer|dns|domain|net|tls|dgram|vm|repl|diagnostics_channel|inspector|test|coverage';
+      code = code.replace(new RegExp('\\b(' + keywords + ')\\b', 'g'), '<span class="syntax-keyword">$1</span>');
+
+      // Numbers
+      code = code.replace(/\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g, '<span class="syntax-number">$1</span>');
+
+      // Functions  
+      code = code.replace(/([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g, '<span class="syntax-function">$1</span>');
+
+      // Properties
+      code = code.replace(/\.([a-zA-Z_$][a-zA-Z0-9_$]*)/g, '.<span class="syntax-property">$1</span>');
+
+      // Error and success indicators
+      code = code.replace(/(❌\s*VULNERABLE|❌\s*BROKEN|ERROR|DANGER|INSECURE)/gi, '<span class="syntax-error">$1</span>');
+      code = code.replace(/(✅\s*SECURE|✅\s*SAFE|✅\s*FIXED|SUCCESS|SAFE)/gi, '<span class="syntax-success">$1</span>');
+
+      // Restore strings and comments
+      commentMap.forEach((value, key) => {
+        code = code.replace(key, value);
+      });
+      stringMap.forEach((value, key) => {
+        code = code.replace(key, value);
+      });
+
+      return code;
+    }
+
     function syntaxHighlight(code) {
       if (!code) return '';
       
@@ -2075,10 +2145,10 @@ security_logger.log_event(
       renderBulletList(theoryDanger, theory.dangerPoints || []);
       renderBulletList(theoryImpact, theory.impactPoints || []);
       if (theory.code) {
-        theoryCode.textContent = theory.code;
+        theoryCode.innerHTML = theoryCodeHighlight(theory.code);
         theoryCodeWrap.classList.remove('hidden');
       } else {
-        theoryCode.textContent = '';
+        theoryCode.innerHTML = '';
         theoryCodeWrap.classList.add('hidden');
       }
       theoryModal.classList.add('show');
